@@ -8,9 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Assets\**" />
-    <EmbeddedResource Remove="Assets\**" />
-    <None Remove="Assets\**" />
+    <None Remove="Assets\Textures\Player.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Assets\Textures\Player.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>

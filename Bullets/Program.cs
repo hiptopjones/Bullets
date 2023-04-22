@@ -12,6 +12,8 @@ namespace Bullets
             
             while (game.IsRunning)
             {
+                game.StartFrame();
+                game.ProcessEvents();
                 game.Update();
                 game.Draw();
             }
