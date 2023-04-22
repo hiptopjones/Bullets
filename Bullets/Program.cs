@@ -15,6 +15,7 @@ namespace Bullets
                 game.StartFrame();
                 game.ProcessEvents();
                 game.Update();
+                game.LateUpdate();
                 game.Draw();
             }
         }

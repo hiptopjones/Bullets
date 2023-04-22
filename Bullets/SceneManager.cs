@@ -19,6 +19,11 @@ namespace Bullets
             CurrentScene?.Update(deltaTime);
         }
 
+        public void LateUpdate(float deltaTime)
+        {
+            CurrentScene?.LateUpdate(deltaTime);
+        }
+
         public void Draw(WindowManager window)
         {
             CurrentScene?.Draw(window);

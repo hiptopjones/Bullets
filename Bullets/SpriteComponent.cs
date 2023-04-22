@@ -21,6 +21,11 @@ namespace Bullets
             Sprite = new Sprite(texture);
         }
 
+        public override void LateUpdate(float deltaTime)
+        {
+            Sprite.Position = Owner.Transform.Position;
+        }
+
         public override void Draw(WindowManager windowManager)
         {
             windowManager.Draw(Sprite);

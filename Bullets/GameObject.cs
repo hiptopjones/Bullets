@@ -12,7 +12,14 @@ namespace Bullets
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
 
         public string Name { get; set; }
+        public TransformComponent Transform { get; set; }
+
         private List<Component> Components { get; } = new List<Component>();
+
+        public GameObject()
+        {
+            Transform = AddComponent<TransformComponent>();
+        }
 
         public void Awake()
         {
@@ -35,6 +42,14 @@ namespace Bullets
             for (int i = Components.Count - 1; i >= 0; i--)
             {
                 Components[i].Update(deltaTime);
+            }
+        }
+
+        public void LateUpdate(float deltaTime)
+        {
+            for (int i = Components.Count - 1; i >= 0; i--)
+            {
+                Components[i].LateUpdate(deltaTime);
             }
         }
 

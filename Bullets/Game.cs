@@ -85,6 +85,13 @@ namespace Bullets
             SceneManager.Update(deltaTime);
         }
 
+        public void LateUpdate()
+        {
+            float deltaTime = TimeManager.DeltaTime;
+
+            SceneManager.LateUpdate(deltaTime);
+        }
+
         public void Draw()
         {
             WindowManager.BeginDraw();

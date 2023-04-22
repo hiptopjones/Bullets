@@ -12,6 +12,7 @@ namespace Bullets
     internal class GameScene : Scene
     {
         public const string PLAYER_TEXTURE_FILE_NAME = "Player.png";
+        public const float PLAYER_MOVEMENT_SPEED = 500;
 
         private GameObject Player { get; set; }
 
@@ -24,6 +25,9 @@ namespace Bullets
 
             SpriteComponent spriteComponent = Player.AddComponent<SpriteComponent>();
             spriteComponent.TextureFileName = PLAYER_TEXTURE_FILE_NAME;
+
+            KeyboardMovementComponent movementComponent = Player.AddComponent<KeyboardMovementComponent>();
+            movementComponent.Speed = PLAYER_MOVEMENT_SPEED;
         }
 
         public override void OnActivate()
@@ -35,6 +39,11 @@ namespace Bullets
         public override void Update(float deltaTime)
         {
             Player.Update(deltaTime);
+        }
+
+        public override void LateUpdate(float deltaTime)
+        {
+            Player.LateUpdate(deltaTime);
         }
 
         public override void Draw(WindowManager windowManager)
