@@ -11,44 +11,60 @@ namespace Bullets
 {
     internal class GameScene : Scene
     {
-        public const string PLAYER_TEXTURE_FILE_NAME = "Player.png";
-        public const float PLAYER_MOVEMENT_SPEED = 500;
+        protected GameObjectCollection SceneGameObjects { get; } = new GameObjectCollection();
 
         private GameObject Player { get; set; }
 
+        private Queue<GameObject> Bullets { get; } = new Queue<GameObject>();
+        private Random Random { get; } = new Random();
+
         public override void OnCreate()
         {
-            Player = new GameObject
-            {
-                Name = "Player"
-            };
+            Player = SceneGameObjects.CreateGameObject(GameSettings.PlayerObjectName);
 
             SpriteComponent spriteComponent = Player.AddComponent<SpriteComponent>();
-            spriteComponent.TextureFileName = PLAYER_TEXTURE_FILE_NAME;
+            spriteComponent.TextureId = GameSettings.TextureId.Player;
 
             KeyboardMovementComponent movementComponent = Player.AddComponent<KeyboardMovementComponent>();
-            movementComponent.Speed = PLAYER_MOVEMENT_SPEED;
+            movementComponent.Speed = GameSettings.PlayerMovementSpeed;
+        }
+        public override void OnDestroy()
+        {
         }
 
         public override void OnActivate()
         {
-            Player.Awake();
-            Player.Start();
+        }
+
+        public override void OnDeactivate()
+        {
         }
 
         public override void Update(float deltaTime)
         {
-            Player.Update(deltaTime);
+            GameObject bullet = SceneGameObjects.CreateGameObject("Bullet");
+            SpriteComponent spritComponent = bullet.AddComponent<SpriteComponent>();
+            spritComponent.TextureId = GameSettings.TextureId.Bullet;
+
+            bullet.Transform.Position = new Vector2f(Random.Next(GameSettings.WindowWidth), Random.Next(GameSettings.WindowHeight));
+
+            Bullets.Enqueue(bullet);
+            if (Bullets.Count > GameSettings.BulletMaxCount)
+            {
+                Bullets.Dequeue().Destroy();
+            }
+
+            SceneGameObjects.Update(deltaTime);
         }
 
         public override void LateUpdate(float deltaTime)
         {
-            Player.LateUpdate(deltaTime);
+            SceneGameObjects.LateUpdate(deltaTime);
         }
 
         public override void Draw(WindowManager windowManager)
         {
-            Player.Draw(windowManager);
+            SceneGameObjects.Draw(windowManager);
         }
     }
 }

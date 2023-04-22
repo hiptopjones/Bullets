@@ -1,4 +1,6 @@
-﻿using SFML.System;
+﻿using NLog;
+using NLog.Fluent;
+using SFML.System;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +12,7 @@ namespace Bullets
 {
     internal class TimeManager
     {
-        private const int FPS_SAMPLE_COUNT = 100;
+        private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
 
         public float TotalTime { get; private set; }
         public float DeltaTime { get; private set; }
@@ -22,7 +24,7 @@ namespace Bullets
 
         private Clock Clock { get; } = new Clock();
 
-        private Queue<float> RecentDeltaTimes { get; } = new Queue<float>(FPS_SAMPLE_COUNT);
+        private Queue<float> RecentDeltaTimes { get; } = new Queue<float>(GameSettings.StatsFpsSampleCount);
 
         public void OnFrameStarted()
         {
@@ -35,7 +37,7 @@ namespace Bullets
 
         private void CalculateFps()
         {
-            if (RecentDeltaTimes.Count == FPS_SAMPLE_COUNT)
+            if (RecentDeltaTimes.Count == GameSettings.StatsFpsSampleCount)
             {
                 RecentDeltaTimes.Dequeue();
             }
@@ -44,6 +46,8 @@ namespace Bullets
 
             RollingFps = 1 / RecentDeltaTimes.Average();
             InstantFps = 1 / DeltaTime;
+
+            //Logger.Info($"FPS Rolling: {RollingFps:0.00} Instant: {InstantFps:0.00}");
         }
     }
 }

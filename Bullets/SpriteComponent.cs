@@ -9,7 +9,7 @@ namespace Bullets
 {
     internal class SpriteComponent : Component
     {
-        public string TextureFileName { get; set; }
+        public GameSettings.TextureId TextureId { get; set; }
 
         private Sprite Sprite { get; set; }
 
@@ -17,7 +17,7 @@ namespace Bullets
         {
             ResourceManager resourceManager = ServiceLocator.Instance.GetService<ResourceManager>();
 
-            Texture texture = resourceManager.GetTexture(TextureFileName);
+            Texture texture = resourceManager.GetTexture(TextureId);
             Sprite = new Sprite(texture);
         }
 

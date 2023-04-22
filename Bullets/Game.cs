@@ -11,10 +11,6 @@ namespace Bullets
 {
     internal class Game
     {
-        private const string GAME_NAME = "Bullets";
-        private const int WINDOW_WIDTH = 800;
-        private const int WINDOW_HEIGHT = 800;
-
         private InputManager InputManager { get; set; }
         private ResourceManager ResourceManager { get; set; }
         private WindowManager WindowManager { get; set; }
@@ -42,7 +38,7 @@ namespace Bullets
             SceneManager = new SceneManager();
             ServiceLocator.Instance.ProvideService(SceneManager);
 
-            WindowManager = new WindowManager(GAME_NAME, WINDOW_WIDTH, WINDOW_HEIGHT);
+            WindowManager = new WindowManager(GameSettings.GameName, GameSettings.WindowWidth, GameSettings.WindowHeight);
             WindowManager.KeyPressed += InputManager.OnKeyPressed;
             WindowManager.KeyReleased += InputManager.OnKeyReleased;
             ServiceLocator.Instance.ProvideService(WindowManager);

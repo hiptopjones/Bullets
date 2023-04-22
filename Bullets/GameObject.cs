@@ -7,17 +7,25 @@ using System.Threading.Tasks;
 
 namespace Bullets
 {
-    internal class GameObject
+    internal sealed class GameObject
     {
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
 
+        private static int nextGameObjectId = 0;
+
+        public int Id { get; private set; }
         public string Name { get; set; }
-        public TransformComponent Transform { get; set; }
+        public TransformComponent Transform { get; private set; }
+
+        public bool IsAlive { get; private set; } = true;
 
         private List<Component> Components { get; } = new List<Component>();
 
         public GameObject()
         {
+            Id = nextGameObjectId++;
+            Name = $"Object{Id}";
+
             Transform = AddComponent<TransformComponent>();
         }
 
@@ -59,6 +67,11 @@ namespace Bullets
             {
                 Components[i].Draw(windowManager);
             }
+        }
+
+        public void Destroy()
+        {
+            IsAlive = false;
         }
 
         public T AddComponent<T>() where T : Component, new()

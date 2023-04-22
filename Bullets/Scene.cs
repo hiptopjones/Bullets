@@ -11,15 +11,15 @@ namespace Bullets
     {
         public abstract void OnCreate();
 
-        public virtual void OnDestroy() { }
+        public abstract void OnDestroy();
 
         public abstract void OnActivate();
 
-        public virtual void OnDeactivate() { }
+        public abstract void OnDeactivate();
 
         public abstract void Update(float deltaTime);
 
-        public virtual void LateUpdate(float deltaTime) { }
+        public abstract void LateUpdate(float deltaTime);
 
         public abstract void Draw(WindowManager windowManager);
     }

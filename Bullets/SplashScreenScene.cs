@@ -10,9 +10,6 @@ namespace Bullets
 {
     internal class SplashScreenScene : Scene
     {
-        public const string SPLASH_TEXTURE_FILE_NAME = "Splash.png";
-        public const float TRANSITION_DELAY_SECONDS = 2;
-
         public int TransitionSceneId { get; set; }
 
         private Sprite Sprite { get; set; }
@@ -27,7 +24,7 @@ namespace Bullets
             
             ResourceManager resourceManager = ServiceLocator.Instance.GetService<ResourceManager>();
 
-            Texture texture = resourceManager.GetTexture(SPLASH_TEXTURE_FILE_NAME);
+            Texture texture = resourceManager.GetTexture(GameSettings.TextureId.SplashScreen);
             Sprite = new Sprite(texture);
 
             FloatRect spriteSize = Sprite.GetLocalBounds();
@@ -37,18 +34,30 @@ namespace Bullets
             Sprite.Position = new Vector2f(windowManager.Width, windowManager.Height) * 0.5f;
         }
 
+        public override void OnDestroy()
+        {
+        }
+
         public override void OnActivate()
         {
             CurrentSeconds = 0;
         }
 
+        public override void OnDeactivate()
+        {
+        }
+
         public override void Update(float deltaTime)
         {
             CurrentSeconds += deltaTime;
-            if (CurrentSeconds >= TRANSITION_DELAY_SECONDS)
+            if (CurrentSeconds >= GameSettings.SplashScreenTransitionDelaySeconds)
             {
                 SceneManager.SwitchTo(TransitionSceneId);
             }
+        }
+
+        public override void LateUpdate(float deltaTime)
+        {
         }
 
         public override void Draw(WindowManager windowManager)

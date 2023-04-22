@@ -9,30 +9,30 @@ namespace Bullets
 {
     internal class ResourceManager
     {
-        private const string ASSETS_DIRECTORY_NAME = "Assets";
-        private const string TEXTURES_DIRECTORY_NAME = "Textures";
-
         public string ResourcesDirectory { get; }
         public string TexturesDirectory { get; }
 
-        private Dictionary<string, Texture> Textures { get; }
+        private Dictionary<GameSettings.TextureId, Texture> Textures { get; } = new Dictionary<GameSettings.TextureId, Texture>();
 
         public ResourceManager()
         {
-            ResourcesDirectory = Path.Combine(Environment.CurrentDirectory, ASSETS_DIRECTORY_NAME);
-            TexturesDirectory = Path.Combine(ResourcesDirectory, TEXTURES_DIRECTORY_NAME);
-
-            Textures = new Dictionary<string, Texture>();
+            ResourcesDirectory = Path.Combine(Environment.CurrentDirectory, GameSettings.ResourcesDirectoryName);
+            TexturesDirectory = Path.Combine(ResourcesDirectory, GameSettings.TexturesDirectoryName);
         }
 
-        public Texture GetTexture(string textureFileName)
+        public Texture GetTexture(GameSettings.TextureId textureId)
         {
-            if (!Textures.TryGetValue(textureFileName, out Texture? texture))
+            if (!Textures.TryGetValue(textureId, out Texture texture))
             {
+                if (!GameSettings.Textures.TryGetValue(textureId, out string textureFileName))
+                {
+                    throw new Exception($"Unable to locate a file path for texture: {textureId}");
+                }
+
                 string textureFilePath = Path.Combine(TexturesDirectory, textureFileName);
                 texture = new Texture(textureFilePath);
 
-                Textures[textureFileName] = texture;
+                Textures[textureId] = texture;
             }
 
             return texture;

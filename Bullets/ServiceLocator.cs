@@ -69,8 +69,7 @@ namespace Bullets
 
         public T GetService<T>(string key) where T : class
         {
-            object service;
-            if (!Services.TryGetValue(key, out service))
+            if (!Services.TryGetValue(key, out object service))
             {
                 throw new Exception($"Unable to locate service for '{key}'");
             }
