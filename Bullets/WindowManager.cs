@@ -8,20 +8,28 @@ using System.Threading.Tasks;
 
 namespace Bullets
 {
-    class Window
+    class WindowManager
     {
-        private RenderWindow RenderWindow { get; }
-
         public event EventHandler<KeyEventArgs> KeyPressed;
         public event EventHandler<KeyEventArgs> KeyReleased;
 
         public bool IsOpen => RenderWindow.IsOpen;
 
-        public Window(string windowName, uint windowWidth, uint windowHeight)
-        {
-            VideoMode videoMode = new VideoMode(windowWidth, windowHeight);
+        public string Name { get; set; }
+        public uint Width { get; set; }
+        public uint Height { get; set; }
 
-            RenderWindow = new RenderWindow(videoMode, windowName, Styles.Titlebar);
+        private VideoMode VideoMode { get; }
+        private RenderWindow RenderWindow { get; }
+
+        public WindowManager(string windowName, uint windowWidth, uint windowHeight)
+        {
+            Width = windowWidth;
+            Height = windowHeight;
+            VideoMode = new VideoMode(Width, Height);
+
+            Name = windowName;
+            RenderWindow = new RenderWindow(VideoMode, Name, Styles.Titlebar);
             RenderWindow.SetVerticalSyncEnabled(true);
 
             RenderWindow.Closed += OnClosed;
@@ -32,10 +40,6 @@ namespace Bullets
         public void ProcessEvents()
         {
             RenderWindow.DispatchEvents();
-        }
-
-        public void Update()
-        {
         }
 
         public void BeginDraw()
@@ -58,17 +62,17 @@ namespace Bullets
             RenderWindow.Close();
         }
 
-        private void OnClosed(object? sender, EventArgs e)
+        private void OnClosed(object sender, EventArgs e)
         {
             RenderWindow.Close();
         }
 
-        private void OnKeyPressed(object? sender, KeyEventArgs e)
+        private void OnKeyPressed(object sender, KeyEventArgs e)
         {
             KeyPressed?.Invoke(sender, e);
         }
 
-        private void OnKeyReleased(object? sender, KeyEventArgs e)
+        private void OnKeyReleased(object sender, KeyEventArgs e)
         {
             KeyReleased?.Invoke(sender, e);
         }

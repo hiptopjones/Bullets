@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using static SFML.Window.Keyboard;
@@ -20,16 +21,9 @@ namespace Bullets
             Escape = 5,
         }
 
-        private HashSet<Keyboard.Key> KeyPressed { get; set; }
-        private HashSet<Keyboard.Key> KeyDown { get; set; }
-        private HashSet<Keyboard.Key> KeyUp { get; set; }
-
-        public InputManager()
-        {
-            KeyPressed = new HashSet<Keyboard.Key>();
-            KeyDown = new HashSet<Keyboard.Key>();
-            KeyUp = new HashSet<Keyboard.Key>();
-        }
+        private HashSet<Keyboard.Key> KeyPressed { get; set; } = new HashSet<Keyboard.Key>();
+        private HashSet<Keyboard.Key> KeyDown { get; set; } = new HashSet<Keyboard.Key>();
+        private HashSet<Keyboard.Key> KeyUp { get; set; } = new HashSet<Keyboard.Key>();
 
         public void OnFrameStarted()
         {
@@ -95,7 +89,7 @@ namespace Bullets
             return false;
         }
 
-        public void OnKeyPressed(object? sender, KeyEventArgs e)
+        public void OnKeyPressed(object sender, KeyEventArgs e)
         {
             if (!KeyPressed.Contains(e.Code))
             {
@@ -104,7 +98,7 @@ namespace Bullets
             }
         }
 
-        public void OnKeyReleased(object? sender, KeyEventArgs e)
+        public void OnKeyReleased(object sender, KeyEventArgs e)
         {
             if (KeyPressed.Contains(e.Code))
             {

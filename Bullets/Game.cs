@@ -11,94 +11,87 @@ namespace Bullets
 {
     internal class Game
     {
-        private Window Window { get; }
+        private const string GAME_NAME = "Bullets";
+        private const int WINDOW_WIDTH = 800;
+        private const int WINDOW_HEIGHT = 800;
 
-        private ResourceManager ResourceManager { get; }
-        private InputManager InputManager { get; }
+        private InputManager InputManager { get; set; }
+        private ResourceManager ResourceManager { get; set; }
+        private WindowManager WindowManager { get; set; }
+        private TimeManager TimeManager { get; set; }
+        private SceneManager SceneManager { get; set; }
 
-        private Clock Clock { get; }
-        private float DeltaTime { get; set; }
-
-        private Sprite PlayerSprite { get; set; }
-
-        public bool IsRunning => Window.IsOpen;
+        public bool IsRunning => WindowManager.IsOpen;
 
         public Game()
         {
+            Initialize();
+        }
+
+        public void Initialize()
+        {
             InputManager = new InputManager();
+            ServiceLocator.Instance.ProvideService(InputManager);
+
             ResourceManager = new ResourceManager();
+            ServiceLocator.Instance.ProvideService(ResourceManager);
+            
+            TimeManager = new TimeManager();
+            ServiceLocator.Instance.ProvideService(TimeManager);
+            
+            SceneManager = new SceneManager();
+            ServiceLocator.Instance.ProvideService(SceneManager);
 
-            Window = new Window("Bullets", 800, 600);
-            Window.KeyPressed += InputManager.OnKeyPressed;
-            Window.KeyReleased += InputManager.OnKeyReleased;
+            WindowManager = new WindowManager(GAME_NAME, WINDOW_WIDTH, WINDOW_HEIGHT);
+            WindowManager.KeyPressed += InputManager.OnKeyPressed;
+            WindowManager.KeyReleased += InputManager.OnKeyReleased;
+            ServiceLocator.Instance.ProvideService(WindowManager);
 
-            Texture playerTexture = ResourceManager.GetTexture("Player.png");
-            PlayerSprite = new Sprite(playerTexture);
+            InitializeScenes();
+        }
 
-            Clock = new Clock();
+        private void InitializeScenes()
+        {
+            GameScene gameScene = new GameScene();
+            int gameSceneId = SceneManager.AddScene(gameScene);
+
+            SplashScreenScene splashScene = new SplashScreenScene();
+            splashScene.TransitionSceneId = gameSceneId;
+            int splashSceneId = SceneManager.AddScene(splashScene);
+
+            SceneManager.SwitchTo(splashSceneId);
         }
 
         public void StartFrame()
         {
-            Time time = Clock.Restart();
-            DeltaTime = time.AsSeconds();
-
-            // Need to clear state at the start of the frame
+            TimeManager.OnFrameStarted();
             InputManager.OnFrameStarted();
         }
 
         public void ProcessEvents()
         {
-            Window.ProcessEvents();
+            WindowManager.ProcessEvents();
 
             if (InputManager.IsKeyPressed(InputManager.Key.Escape))
             {
-                Window.Close();
+                WindowManager.Close();
             }
         }
 
         public void Update()
         {
-            Window.Update();
+            float deltaTime = TimeManager.DeltaTime;
 
-            MovePlayer();
+            SceneManager.Update(deltaTime);
         }
 
         public void Draw()
         {
-            Window.BeginDraw();
-            Window.Draw(PlayerSprite);
-            Window.EndDraw();
-        }
+            WindowManager.BeginDraw();
 
-        private void MovePlayer()
-        {
-            const int moveSpeed = 500;
+            SceneManager.Draw(WindowManager);
 
-            Vector2f spritePosition = PlayerSprite.Position;
-
-            int xMove = 0;
-            if (InputManager.IsKeyPressed(InputManager.Key.Left))
-            {
-                xMove = -moveSpeed;
-            }
-            else if (InputManager.IsKeyPressed(InputManager.Key.Right))
-            {
-                xMove = moveSpeed;
-            }
-
-            int yMove = 0;
-            if (InputManager.IsKeyPressed(InputManager.Key.Up))
-            {
-                yMove = -moveSpeed;
-            }
-            if (InputManager.IsKeyPressed(InputManager.Key.Down))
-            {
-                yMove = moveSpeed;
-            }
-
-            Vector2f frameMove = new Vector2f(xMove, yMove) * DeltaTime;
-            PlayerSprite.Position = new Vector2f(spritePosition.X + frameMove.X, spritePosition.Y + frameMove.Y);
+            WindowManager.EndDraw();
         }
     }
 }
