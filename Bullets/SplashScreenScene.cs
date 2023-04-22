@@ -51,9 +51,9 @@ namespace Bullets
             }
         }
 
-        public override void Draw(WindowManager window)
+        public override void Draw(WindowManager windowManager)
         {
-            window.Draw(Sprite);
+            windowManager.Draw(Sprite);
         }
     }
 }

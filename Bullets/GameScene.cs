@@ -11,57 +11,35 @@ namespace Bullets
 {
     internal class GameScene : Scene
     {
-        private Sprite PlayerSprite { get; set; }
+        public const string PLAYER_TEXTURE_FILE_NAME = "Player.png";
 
-        private InputManager InputManager { get; set; }
+        private GameObject Player { get; set; }
 
         public override void OnCreate()
         {
-            InputManager = ServiceLocator.Instance.GetService<InputManager>();
+            Player = new GameObject
+            {
+                Name = "Player"
+            };
 
-            ResourceManager resourceManager = ServiceLocator.Instance.GetService<ResourceManager>();
-            Texture playerTexture = resourceManager.GetTexture("Player.png");
-
-            PlayerSprite = new Sprite(playerTexture);
+            SpriteComponent spriteComponent = Player.AddComponent<SpriteComponent>();
+            spriteComponent.TextureFileName = PLAYER_TEXTURE_FILE_NAME;
         }
 
         public override void OnActivate()
         {
+            Player.Awake();
+            Player.Start();
         }
 
         public override void Update(float deltaTime)
         {
-            const int moveSpeed = 500;
-
-            Vector2f spritePosition = PlayerSprite.Position;
-
-            int xMove = 0;
-            if (InputManager.IsKeyPressed(InputManager.Key.Left))
-            {
-                xMove = -moveSpeed;
-            }
-            else if (InputManager.IsKeyPressed(InputManager.Key.Right))
-            {
-                xMove = moveSpeed;
-            }
-
-            int yMove = 0;
-            if (InputManager.IsKeyPressed(InputManager.Key.Up))
-            {
-                yMove = -moveSpeed;
-            }
-            if (InputManager.IsKeyPressed(InputManager.Key.Down))
-            {
-                yMove = moveSpeed;
-            }
-
-            Vector2f frameMove = new Vector2f(xMove, yMove) * deltaTime;
-            PlayerSprite.Position = new Vector2f(spritePosition.X + frameMove.X, spritePosition.Y + frameMove.Y);
+            Player.Update(deltaTime);
         }
 
-        public override void Draw(WindowManager window)
+        public override void Draw(WindowManager windowManager)
         {
-            window.Draw(PlayerSprite);
+            Player.Draw(windowManager);
         }
     }
 }
