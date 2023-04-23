@@ -31,10 +31,12 @@ namespace Bullets
 
             AnimationComponent animationComponent = Player.AddComponent<AnimationComponent>();
             animationComponent.AddAnimation((int)AnimationState.Idle, CreateIdleAnimation());
+            animationComponent.AddAnimation((int)AnimationState.Walk, CreateWalkAnimation());
             animationComponent.SetAnimationState((int)AnimationState.Idle);
 
             KeyboardMovementComponent movementComponent = Player.AddComponent<KeyboardMovementComponent>();
             movementComponent.Speed = GameSettings.PlayerMovementSpeed;
+            movementComponent.LookDirectionChange += animationComponent.OnLookDirectionChanged;
         }
 
         private Animation CreateIdleAnimation()
@@ -75,6 +77,53 @@ namespace Bullets
 
             return idleAnimation;
         }
+
+        private Animation CreateWalkAnimation()
+        {
+            int walkAnimationFrameWidth = 165;
+            int walkAnimationFrameHeight = 145;
+            float walkAnimationDisplayTime = 0.15f;
+
+            Animation walkAnimation = new Animation();
+
+            walkAnimation.AddFrame(new AnimationFrame
+            {
+                TextureId = (int)GameSettings.TextureId.Player,
+                TextureRect = new IntRect(600, 290, walkAnimationFrameWidth, walkAnimationFrameHeight),
+                DisplayTime = walkAnimationDisplayTime
+            });
+
+            walkAnimation.AddFrame(new AnimationFrame
+            {
+                TextureId = (int)GameSettings.TextureId.Player,
+                TextureRect = new IntRect(800, 290, walkAnimationFrameWidth, walkAnimationFrameHeight),
+                DisplayTime = walkAnimationDisplayTime
+            });
+
+            walkAnimation.AddFrame(new AnimationFrame
+            {
+                TextureId = (int)GameSettings.TextureId.Player,
+                TextureRect = new IntRect(0, 435, walkAnimationFrameWidth, walkAnimationFrameHeight),
+                DisplayTime = walkAnimationDisplayTime
+            });
+
+            walkAnimation.AddFrame(new AnimationFrame
+            {
+                TextureId = (int)GameSettings.TextureId.Player,
+                TextureRect = new IntRect(200, 435, walkAnimationFrameWidth, walkAnimationFrameHeight),
+                DisplayTime = walkAnimationDisplayTime
+            });
+
+            walkAnimation.AddFrame(new AnimationFrame
+            {
+                TextureId = (int)GameSettings.TextureId.Player,
+                TextureRect = new IntRect(400, 435, walkAnimationFrameWidth, walkAnimationFrameHeight),
+                DisplayTime = walkAnimationDisplayTime
+            });
+
+            return walkAnimation;
+        }
+
 
         public override void OnDestroy()
         {

@@ -7,9 +7,18 @@ using System.Threading.Tasks;
 
 namespace Bullets
 {
+    public class LookDirectionEventArgs : EventArgs
+    {
+        public Vector2f LookDirection { get; set; }
+    }
+
     internal class KeyboardMovementComponent : Component
     {
         public float Speed { get; set; }
+
+        public event EventHandler<LookDirectionEventArgs> LookDirectionChange;
+
+        private Vector2f PreviousLookDirection { get; set; }
 
         private InputManager InputManager { get; set; }
 
@@ -40,7 +49,25 @@ namespace Bullets
                 ySpeed = Speed;
             }
 
-           Owner.Transform.Position += new Vector2f(xSpeed, ySpeed) * deltaTime;
+            // Using velocity as a proxy for the direction the player is looking
+            Vector2f lookDirection = new Vector2f(xSpeed, ySpeed);
+            if (lookDirection != PreviousLookDirection)
+            {
+                RaiseLookDirectionChangeEvent(lookDirection);
+                PreviousLookDirection = lookDirection;
+            }
+
+            Owner.Transform.Position += new Vector2f(xSpeed, ySpeed) * deltaTime;
+        }
+
+        private void RaiseLookDirectionChangeEvent(Vector2f lookDirection)
+        {
+            LookDirectionEventArgs eventArgs = new LookDirectionEventArgs
+            {
+                LookDirection = lookDirection
+            };
+
+            LookDirectionChange?.Invoke(this, eventArgs);
         }
     }
 }

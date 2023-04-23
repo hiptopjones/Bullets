@@ -17,6 +17,8 @@ namespace Bullets
 
         private ResourceManager ResourceManager { get; set; }
 
+        public bool IsHorizontalFlipEnabled { get; set; }
+
         public override void Awake()
         {
             ResourceManager = ServiceLocator.Instance.GetService<ResourceManager>();
@@ -38,7 +40,21 @@ namespace Bullets
 
         public override void Draw(WindowManager windowManager)
         {
+            IntRect savedTextureRect = Sprite.TextureRect;
+
+            if (IsHorizontalFlipEnabled)
+            {
+                IntRect flippedTextureRect = Sprite.TextureRect;
+                flippedTextureRect.Left += flippedTextureRect.Width;
+                flippedTextureRect.Width *= -1;
+
+                Sprite.TextureRect = flippedTextureRect;
+            }
+
             windowManager.Draw(Sprite);
+
+            // Undo any adjustments
+            Sprite.TextureRect = savedTextureRect;
         }
 
         // Necessary for animations, where different states could reference different textures

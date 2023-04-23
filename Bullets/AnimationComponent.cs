@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NLog;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,8 @@ namespace Bullets
 {
     internal class AnimationComponent : Component
     {
+        private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
+
         private const int ANIMATION_STATE_NONE = -1;
 
         private int CurrentAnimationState { get; set; } = ANIMATION_STATE_NONE;
@@ -60,6 +63,13 @@ namespace Bullets
 
         public void SetAnimationState(int animationState)
         {
+            //Logger.Info($"AnimationState: old {CurrentAnimationState} new {animationState}");
+
+            if (CurrentAnimationState == animationState)
+            {
+                return;
+            }
+
             CurrentAnimationState = animationState;
 
             Animation animation = GetCurrentAnimation();
@@ -82,7 +92,6 @@ namespace Bullets
             return null;
         }
 
-
         private void UpdateSpriteComponent(AnimationFrame frame)
         {
             // Protect against being called too early
@@ -95,6 +104,22 @@ namespace Bullets
             SpriteComponent.TextureRect = frame.TextureRect;
 
             SpriteComponent.RefreshTexture();
+        }
+
+        internal void OnLookDirectionChanged(object sender, LookDirectionEventArgs e)
+        {
+            //Logger.Info($"OnLookDirectionChanged: {e.LookDirection.X}, {e.LookDirection.Y}");
+
+            SpriteComponent.IsHorizontalFlipEnabled = (e.LookDirection.X < 0);
+
+            if (e.LookDirection.X != 0 || e.LookDirection.Y != 0)
+            {
+                SetAnimationState((int)AnimationState.Walk);
+            }
+            else
+            {
+                SetAnimationState((int)AnimationState.Idle);
+            }
         }
     }
 }
