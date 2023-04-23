@@ -150,9 +150,9 @@ namespace Bullets
             SceneGameObjects.LateUpdate(deltaTime);
         }
 
-        public override void Draw(WindowManager windowManager)
+        public override void Draw(GraphicsManager graphicsManager)
         {
-            SceneGameObjects.Draw(windowManager);
+            SceneGameObjects.Draw(graphicsManager);
         }
     }
 }

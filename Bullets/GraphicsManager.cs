@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Bullets
 {
-    class WindowManager
+    class GraphicsManager
     {
         public event EventHandler<KeyEventArgs> KeyPressed;
         public event EventHandler<KeyEventArgs> KeyReleased;
@@ -22,7 +22,7 @@ namespace Bullets
         private VideoMode VideoMode { get; }
         private RenderWindow RenderWindow { get; }
 
-        public WindowManager(string windowName, uint windowWidth, uint windowHeight)
+        public GraphicsManager(string windowName, uint windowWidth, uint windowHeight)
         {
             Width = windowWidth;
             Height = windowHeight;

@@ -38,7 +38,7 @@ namespace Bullets
             Sprite.Position = Owner.Transform.Position;
         }
 
-        public override void Draw(WindowManager windowManager)
+        public override void Draw(GraphicsManager graphicsManager)
         {
             IntRect savedTextureRect = Sprite.TextureRect;
 
@@ -51,7 +51,7 @@ namespace Bullets
                 Sprite.TextureRect = flippedTextureRect;
             }
 
-            windowManager.Draw(Sprite);
+            graphicsManager.Draw(Sprite);
 
             // Undo any adjustments
             Sprite.TextureRect = savedTextureRect;

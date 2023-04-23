@@ -14,6 +14,6 @@ namespace Bullets
         public virtual void Start() { }
         public virtual void Update(float deltaTime) { }
         public virtual void LateUpdate(float deltaTime) { }
-        public virtual void Draw(WindowManager windowManager) { }
+        public virtual void Draw(GraphicsManager graphicsManager) { }
     }
 }

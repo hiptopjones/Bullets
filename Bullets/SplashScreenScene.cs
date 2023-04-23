@@ -30,8 +30,8 @@ namespace Bullets
             FloatRect spriteSize = Sprite.GetLocalBounds();
             Sprite.Origin = new Vector2f(spriteSize.Width, spriteSize.Height) * 0.5f;
 
-            WindowManager windowManager = ServiceLocator.Instance.GetService<WindowManager>();
-            Sprite.Position = new Vector2f(windowManager.Width, windowManager.Height) * 0.5f;
+            GraphicsManager graphicsManager = ServiceLocator.Instance.GetService<GraphicsManager>();
+            Sprite.Position = new Vector2f(graphicsManager.Width, graphicsManager.Height) * 0.5f;
         }
 
         public override void OnDestroy()
@@ -63,9 +63,9 @@ namespace Bullets
             // Nothing
         }
 
-        public override void Draw(WindowManager windowManager)
+        public override void Draw(GraphicsManager graphicsManager)
         {
-            windowManager.Draw(Sprite);
+            graphicsManager.Draw(Sprite);
         }
     }
 }

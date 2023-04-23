@@ -13,11 +13,11 @@ namespace Bullets
     {
         private InputManager InputManager { get; set; }
         private ResourceManager ResourceManager { get; set; }
-        private WindowManager WindowManager { get; set; }
+        private GraphicsManager GraphicsManager { get; set; }
         private TimeManager TimeManager { get; set; }
         private SceneManager SceneManager { get; set; }
 
-        public bool IsRunning => WindowManager.IsOpen;
+        public bool IsRunning => GraphicsManager.IsOpen;
 
         public Game()
         {
@@ -38,10 +38,10 @@ namespace Bullets
             SceneManager = new SceneManager();
             ServiceLocator.Instance.ProvideService(SceneManager);
 
-            WindowManager = new WindowManager(GameSettings.GameName, GameSettings.WindowWidth, GameSettings.WindowHeight);
-            WindowManager.KeyPressed += InputManager.OnKeyPressed;
-            WindowManager.KeyReleased += InputManager.OnKeyReleased;
-            ServiceLocator.Instance.ProvideService(WindowManager);
+            GraphicsManager = new GraphicsManager(GameSettings.GameName, GameSettings.WindowWidth, GameSettings.WindowHeight);
+            GraphicsManager.KeyPressed += InputManager.OnKeyPressed;
+            GraphicsManager.KeyReleased += InputManager.OnKeyReleased;
+            ServiceLocator.Instance.ProvideService(GraphicsManager);
 
             InitializeScenes();
         }
@@ -66,11 +66,11 @@ namespace Bullets
 
         public void ProcessEvents()
         {
-            WindowManager.ProcessEvents();
+            GraphicsManager.ProcessEvents();
 
             if (InputManager.IsKeyPressed(InputManager.Key.Escape))
             {
-                WindowManager.Close();
+                GraphicsManager.Close();
             }
         }
 
@@ -90,11 +90,11 @@ namespace Bullets
 
         public void Draw()
         {
-            WindowManager.BeginDraw();
+            GraphicsManager.BeginDraw();
 
-            SceneManager.Draw(WindowManager);
+            SceneManager.Draw(GraphicsManager);
 
-            WindowManager.EndDraw();
+            GraphicsManager.EndDraw();
         }
     }
 }

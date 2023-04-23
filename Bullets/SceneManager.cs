@@ -24,7 +24,7 @@ namespace Bullets
             CurrentScene?.LateUpdate(deltaTime);
         }
 
-        public void Draw(WindowManager window)
+        public void Draw(GraphicsManager window)
         {
             CurrentScene?.Draw(window);
         }

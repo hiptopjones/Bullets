@@ -64,11 +64,11 @@ namespace Bullets
             }
         }
 
-        public void Draw(WindowManager windowManager)
+        public void Draw(GraphicsManager graphicsManager)
         {
             foreach (GameObject gameObject in GameObjects)
             {
-                gameObject.Draw(windowManager);
+                gameObject.Draw(graphicsManager);
             }
         }
 
