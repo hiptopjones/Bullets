@@ -29,6 +29,7 @@ namespace Bullets
             Transform = AddComponent<TransformComponent>();
         }
 
+        // Called exactly once when the object is initialized
         public void Awake()
         {
             for (int i = Components.Count - 1; i >= 0; i--)
@@ -37,6 +38,7 @@ namespace Bullets
             }
         }
 
+        // Called exactly once when the object is enabled
         public void Start()
         {
             for (int i = Components.Count - 1; i >= 0; i--)
@@ -45,6 +47,7 @@ namespace Bullets
             }
         }
 
+        // Called every frame
         public void Update(float deltaTime)
         {
             for (int i = Components.Count - 1; i >= 0; i--)
@@ -53,6 +56,7 @@ namespace Bullets
             }
         }
 
+        // Called every frame (after all Update() calls complete)
         public void LateUpdate(float deltaTime)
         {
             for (int i = Components.Count - 1; i >= 0; i--)
@@ -61,6 +65,7 @@ namespace Bullets
             }
         }
 
+        // Called every frame
         public void Draw(WindowManager windowManager)
         {
             for (int i = Components.Count - 1; i >= 0; i--)

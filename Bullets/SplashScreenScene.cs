@@ -24,7 +24,7 @@ namespace Bullets
             
             ResourceManager resourceManager = ServiceLocator.Instance.GetService<ResourceManager>();
 
-            Texture texture = resourceManager.GetTexture(GameSettings.TextureId.SplashScreen);
+            Texture texture = resourceManager.GetTexture((int)GameSettings.TextureId.SplashScreen);
             Sprite = new Sprite(texture);
 
             FloatRect spriteSize = Sprite.GetLocalBounds();
@@ -36,6 +36,7 @@ namespace Bullets
 
         public override void OnDestroy()
         {
+            // Nothing
         }
 
         public override void OnActivate()
@@ -45,6 +46,7 @@ namespace Bullets
 
         public override void OnDeactivate()
         {
+            // Nothing
         }
 
         public override void Update(float deltaTime)
@@ -58,6 +60,7 @@ namespace Bullets
 
         public override void LateUpdate(float deltaTime)
         {
+            // Nothing
         }
 
         public override void Draw(WindowManager windowManager)

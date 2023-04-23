@@ -12,7 +12,7 @@ namespace Bullets
         public string ResourcesDirectory { get; }
         public string TexturesDirectory { get; }
 
-        private Dictionary<GameSettings.TextureId, Texture> Textures { get; } = new Dictionary<GameSettings.TextureId, Texture>();
+        private Dictionary<int, Texture> Textures { get; } = new Dictionary<int, Texture>();
 
         public ResourceManager()
         {
@@ -20,7 +20,7 @@ namespace Bullets
             TexturesDirectory = Path.Combine(ResourcesDirectory, GameSettings.TexturesDirectoryName);
         }
 
-        public Texture GetTexture(GameSettings.TextureId textureId)
+        public Texture GetTexture(int textureId)
         {
             if (!Textures.TryGetValue(textureId, out Texture texture))
             {

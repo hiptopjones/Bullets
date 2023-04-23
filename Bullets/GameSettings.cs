@@ -11,9 +11,9 @@ namespace Bullets
     {
         public const string GameName = "Bullets";
 
+        // Window
         public const int WindowWidth = 800;
         public const int WindowHeight = 600;
-
         public static readonly Color WindowClearColor = Color.White;
 
         // Stats
@@ -25,7 +25,7 @@ namespace Bullets
 
         // Player
         public const string PlayerObjectName = "Player";
-        public const string PlayerTextureFileName = "Player.png";
+        public const string PlayerTextureFileName = "Viking.png";
         public const float PlayerMovementSpeed = 500;
 
         // Bullet
@@ -43,11 +43,11 @@ namespace Bullets
             Bullet
         }
 
-        public static readonly Dictionary<TextureId, string> Textures = new Dictionary<TextureId, string>
+        public static readonly Dictionary<int, string> Textures = new Dictionary<int, string>
         {
-            { TextureId.SplashScreen, SplashScreenTextureFileName },
-            { TextureId.Player, PlayerTextureFileName },
-            { TextureId.Bullet, BulletTextureFileName },
+            { (int)TextureId.SplashScreen, SplashScreenTextureFileName },
+            { (int)TextureId.Player, PlayerTextureFileName },
+            { (int)TextureId.Bullet, BulletTextureFileName },
         };
     }
 }
