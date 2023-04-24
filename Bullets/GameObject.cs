@@ -65,15 +65,6 @@ namespace Bullets
             }
         }
 
-        // Called every frame
-        public void Draw(GraphicsManager graphicsManager)
-        {
-            for (int i = Components.Count - 1; i >= 0; i--)
-            {
-                Components[i].Draw(graphicsManager);
-            }
-        }
-
         public void Destroy()
         {
             IsAlive = false;
@@ -107,5 +98,11 @@ namespace Bullets
 
             return component;
         }
+
+        public bool HasComponent<T>() where T : Component
+        {
+            return Components.OfType<T>().Any();
+        }
+
     }
 }

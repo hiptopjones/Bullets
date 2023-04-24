@@ -11,11 +11,14 @@ namespace Bullets
     {
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
 
-        private List<GameObject> GameObjects { get; } = new List<GameObject>();
-        
+        // Systems
+        private CoreSystem CoreSystem { get; } = new CoreSystem();
+        private DrawableSystem DrawableSystem { get; } = new DrawableSystem();
+
+        // Double Buffer (to prevent race conditions)
+        private bool IsUsingFirstCollection { get; set; }
         private List<GameObject> NewGameObjects1 { get; } = new List<GameObject>();
         private List<GameObject> NewGameObjects2 { get; } = new List<GameObject>();
-        private bool IsUsingFirstCollection { get; set; }
         private List<GameObject> NewGameObjects
         {
             get
@@ -48,71 +51,52 @@ namespace Bullets
             ProcessRemovals();
             ProcessAdditions();
 
-            //Logger.Info($"Objects: {GameObjects.Count}");
-
-            foreach (GameObject gameObject in GameObjects)
-            {
-                gameObject.Update(deltaTime);
-            }
+            CoreSystem.Update(deltaTime);
         }
 
         public void LateUpdate(float deltaTime)
         {
-            foreach (GameObject gameObject in GameObjects)
-            {
-                gameObject.LateUpdate(deltaTime);
-            }
+            CoreSystem.LateUpdate(deltaTime);
         }
 
         public void Draw(GraphicsManager graphicsManager)
         {
-            foreach (GameObject gameObject in GameObjects)
-            {
-                gameObject.Draw(graphicsManager);
-            }
+            DrawableSystem.Draw(graphicsManager);
         }
 
-        public void ProcessRemovals()
+        private void ProcessRemovals()
         {
-            int i = 0;
-            while (i < GameObjects.Count)
-            {
-                if (GameObjects[i].IsAlive)
-                {
-                    i++;
-                    continue;
-                }
-
-                // Swap and pop
-                int lastIndex = GameObjects.Count - 1;
-                GameObjects[i] = GameObjects[lastIndex];
-                GameObjects.RemoveAt(lastIndex);
-            }
+            CoreSystem.ProcessRemovals();
+            DrawableSystem.ProcessRemovals();
         }
 
-        public void ProcessAdditions()
+        private void ProcessAdditions()
         {
+            if (!NewGameObjects.Any())
+            {
+                return;
+            }
+
             // Using a double-buffering pattern to avoid race problems
             // if any Awake() or Start() implementations add new objects
             // (Those new objects would be processed next frame.)
-            if (NewGameObjects.Any())
+            List<GameObject> addedGameObjects = NewGameObjects;
+            IsUsingFirstCollection = !IsUsingFirstCollection;
+
+            foreach (GameObject gameObject in addedGameObjects)
             {
-                List<GameObject> addedGameObjects = NewGameObjects;
-                IsUsingFirstCollection = !IsUsingFirstCollection;
-
-                foreach (GameObject gameObject in addedGameObjects)
-                {
-                    gameObject.Awake();
-                }
-
-                foreach (GameObject gameObject in addedGameObjects)
-                {
-                    gameObject.Start();
-                }
-
-                GameObjects.AddRange(addedGameObjects);
-                addedGameObjects.Clear();
+                gameObject.Awake();
             }
+
+            foreach (GameObject gameObject in addedGameObjects)
+            {
+                gameObject.Start();
+            }
+
+            CoreSystem.ProcessAdditions(addedGameObjects);
+            DrawableSystem.ProcessAdditions(addedGameObjects.Where(x => x.HasComponent<DrawableComponent>()));
+
+            addedGameObjects.Clear();
         }
     }
 }

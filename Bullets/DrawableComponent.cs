@@ -6,11 +6,8 @@ using System.Threading.Tasks;
 
 namespace Bullets
 {
-    internal class DrawableComponent
+    internal abstract class DrawableComponent : Component
     {
-        public virtual void Draw(GraphicsManager graphicsManager)
-        {
-
-        }
+        public abstract void Draw(GraphicsManager graphicsManager);
     }
 }

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Bullets
 {
-    internal class SpriteComponent : Component
+    internal class SpriteComponent : DrawableComponent
     {
         public int TextureId { get; set; }
         public IntRect TextureRect { get; set; }
