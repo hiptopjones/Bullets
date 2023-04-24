@@ -1,4 +1,5 @@
-﻿using SFML.Graphics;
+﻿using NLog;
+using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
 using System;
@@ -18,13 +19,13 @@ namespace Bullets
 
     internal class GameScene : Scene
     {
-        protected GameObjectCollection SceneGameObjects { get; } = new GameObjectCollection();
+        protected GameObjectManager GameObjectManager { get; } = new GameObjectManager();
 
         private GameObject Player { get; set; }
 
         public override void OnCreate()
         {
-            Player = SceneGameObjects.CreateGameObject(GameSettings.PlayerObjectName);
+            Player = GameObjectManager.CreateGameObject(GameSettings.PlayerObjectName);
 
             SpriteComponent spriteComponent = Player.AddComponent<SpriteComponent>();
             spriteComponent.TextureId = (int)GameSettings.TextureId.Player;
@@ -124,7 +125,6 @@ namespace Bullets
             return walkAnimation;
         }
 
-
         public override void OnDestroy()
         {
             // Nothing
@@ -142,17 +142,17 @@ namespace Bullets
 
         public override void Update(float deltaTime)
         {
-            SceneGameObjects.Update(deltaTime);
+            GameObjectManager.Update(deltaTime);
         }
 
         public override void LateUpdate(float deltaTime)
         {
-            SceneGameObjects.LateUpdate(deltaTime);
+            GameObjectManager.LateUpdate(deltaTime);
         }
 
         public override void Draw(GraphicsManager graphicsManager)
         {
-            SceneGameObjects.Draw(graphicsManager);
+            GameObjectManager.Draw(graphicsManager);
         }
     }
 }

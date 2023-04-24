@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Bullets
 {
-    internal class GameObjectCollection
+    internal class GameObjectManager
     {
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
 
