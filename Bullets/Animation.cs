@@ -13,10 +13,14 @@ namespace Bullets
         public int TextureId;
         public IntRect TextureRect;
         public float DisplayTime;
+        public Action Callback; // Called when the frame is entered
     }
 
     internal class Animation
     {
+        // Indicates if this animation loop or just plays one time
+        public bool IsSingleShot { get; set; }
+
         private List<AnimationFrame> Frames { get; } = new List<AnimationFrame>();
 
         private int CurrentFrameIndex { get; set; }
@@ -54,8 +58,22 @@ namespace Bullets
 
         private void SetCurrentFrame(int frameIndex)
         {
+            if (frameIndex >= Frames.Count && IsSingleShot)
+            {
+                // Do not update the frame index if single-shot animation is complete
+                CurrentFrameTime = 0;
+                return;
+            }
+
             CurrentFrameIndex = frameIndex % Frames.Count;
             CurrentFrameTime = 0;
+
+            // Check for a callback
+            AnimationFrame frame = GetCurrentFrame();
+            if (frame.Callback != null)
+            {
+                frame.Callback();
+            }
         }
     }
 }
