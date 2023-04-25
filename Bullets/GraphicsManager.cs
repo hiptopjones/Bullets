@@ -54,6 +54,9 @@ namespace Bullets
 
         public void EndDraw()
         {
+            // Draw any debug graphics on top of everything before displaying the scene
+            Debug.Draw(this);
+
             RenderWindow.Display();
         }
 

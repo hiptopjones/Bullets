@@ -55,7 +55,7 @@ namespace Bullets
             splashScene.TransitionSceneId = gameSceneId;
             int splashSceneId = SceneManager.AddScene(splashScene);
 
-            SceneManager.SwitchTo(splashSceneId);
+            SceneManager.SwitchTo(gameSceneId);
         }
 
         public void StartFrame()

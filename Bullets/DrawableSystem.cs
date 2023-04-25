@@ -8,25 +8,25 @@ namespace Bullets
 {
     internal class DrawableSystem
     {
-        private List<GameObject> GameObjects { get; } = new List<GameObject>();
+        private List<DrawableComponent> DrawableComponents { get; } = new List<DrawableComponent>();
 
         public void ProcessAdditions(IEnumerable<GameObject> newGameObjects)
         {
-            GameObjects.AddRange(newGameObjects);
+            DrawableComponents.AddRange(newGameObjects
+                .Select(x => x.GetComponent<DrawableComponent>())
+                .Where(x => x != null));
         }
 
         public void ProcessRemovals()
         {
             // Remove any objects from consideration that are dead
-            Utilities.DeleteWithSwapAndPop(GameObjects, x => !x.IsAlive);
+            Utilities.DeleteWithSwapAndPop(DrawableComponents, x => !x.Owner.IsAlive);
         }
 
         public void Draw(GraphicsManager graphicsManager)
         {
-            // TODO: Manage this separately so that Draw() is as fast as possible
-            IEnumerable<DrawableComponent> drawableComponents = GameObjects.Select(x => x.GetComponent<DrawableComponent>());
-
-            foreach (DrawableComponent drawableComponent in drawableComponents)
+            // TODO: Manage sort order and/or layer
+            foreach (DrawableComponent drawableComponent in DrawableComponents)
             {
                 drawableComponent.Draw(graphicsManager);
             }

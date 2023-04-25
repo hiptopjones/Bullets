@@ -1,6 +1,7 @@
 ﻿using NLog;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -90,13 +91,7 @@ namespace Bullets
 
         public T GetComponent<T>() where T : Component
         {
-            T component = Components.OfType<T>().SingleOrDefault();
-            if (component == null)
-            {
-                Logger.Info($"Component of type {typeof(T).Name} does not exist on object '{Name}'");
-            }
-
-            return component;
+            return Components.OfType<T>().SingleOrDefault();
         }
 
         public bool HasComponent<T>() where T : Component

@@ -14,6 +14,7 @@ namespace Bullets
         // Systems
         private CoreSystem CoreSystem { get; } = new CoreSystem();
         private DrawableSystem DrawableSystem { get; } = new DrawableSystem();
+        private CollisionSystem CollisionSystem { get; } = new CollisionSystem();
 
         // Double Buffer (to prevent race conditions)
         private bool IsUsingFirstCollection { get; set; }
@@ -52,6 +53,7 @@ namespace Bullets
             ProcessAdditions();
 
             CoreSystem.Update(deltaTime);
+            CollisionSystem.Update();
         }
 
         public void LateUpdate(float deltaTime)
@@ -68,6 +70,7 @@ namespace Bullets
         {
             CoreSystem.ProcessRemovals();
             DrawableSystem.ProcessRemovals();
+            CollisionSystem.ProcessRemovals();
         }
 
         private void ProcessAdditions()
@@ -94,7 +97,8 @@ namespace Bullets
             }
 
             CoreSystem.ProcessAdditions(addedGameObjects);
-            DrawableSystem.ProcessAdditions(addedGameObjects.Where(x => x.HasComponent<DrawableComponent>()));
+            DrawableSystem.ProcessAdditions(addedGameObjects);
+            CollisionSystem.ProcessAdditions(addedGameObjects);
 
             addedGameObjects.Clear();
         }

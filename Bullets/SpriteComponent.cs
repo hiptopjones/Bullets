@@ -61,7 +61,13 @@ namespace Bullets
         public void RefreshTexture()
         {
             Sprite.Texture = ResourceManager.GetTexture(TextureId);
-            Sprite.TextureRect = TextureRect;
+
+            // Check if our texture rect was actually set to something valid before
+            // overwriting the default one the sprite uses
+            if (TextureRect.Width > 0)
+            {
+                Sprite.TextureRect = TextureRect;
+            }
         }
     }
 }

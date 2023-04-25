@@ -21,23 +21,62 @@ namespace Bullets
     {
         protected GameObjectManager GameObjectManager { get; } = new GameObjectManager();
 
-        private GameObject Player { get; set; }
+        private Queue<GameObject> Bullets { get; set; } = new Queue<GameObject>();
+        private Random Random { get; set; } = new Random();
 
         public override void OnCreate()
         {
-            Player = GameObjectManager.CreateGameObject(GameSettings.PlayerObjectName);
+            GameObject player = CreatePlayer();
+        }
 
-            SpriteComponent spriteComponent = Player.AddComponent<SpriteComponent>();
+        private GameObject CreateBullet()
+        {
+            GameObject bullet = GameObjectManager.CreateGameObject(GameSettings.BulletObjectName);
+
+            bullet.Transform.Position = new Vector2f(
+                Random.NextSingle() * GameSettings.WindowWidth,
+                Random.NextSingle() * GameSettings.WindowHeight);
+
+            SpriteComponent spriteComponent = bullet.AddComponent<SpriteComponent>();
+            spriteComponent.TextureId = (int)GameSettings.TextureId.Bullet; 
+
+            VelocityMovementComponent movementComponent = bullet.AddComponent<VelocityMovementComponent>();
+            movementComponent.Velocity = new Vector2f(
+                (Random.NextSingle() - 0.5f) * 100,
+                (Random.NextSingle() - 0.5f) * 100);
+
+            BoxColliderComponent colliderComponent = bullet.AddComponent<BoxColliderComponent>();
+            colliderComponent.SetColliderRect(GameSettings.BulletColliderRect);
+            colliderComponent.SetColliderRectOffset(GameSettings.BulletColliderRectOffset);
+
+            DebugCollisionHandlerComponent collisionHandlerComponent = bullet.AddComponent<DebugCollisionHandlerComponent>();
+
+            return bullet;
+        }
+
+        private GameObject CreatePlayer()
+        {
+            GameObject player = GameObjectManager.CreateGameObject(GameSettings.PlayerObjectName);
+
+            SpriteComponent spriteComponent = player.AddComponent<SpriteComponent>();
             spriteComponent.TextureId = (int)GameSettings.TextureId.Player;
 
-            AnimationComponent animationComponent = Player.AddComponent<AnimationComponent>();
+            AnimationComponent animationComponent = player.AddComponent<AnimationComponent>();
             animationComponent.AddAnimation((int)AnimationState.Idle, CreateIdleAnimation());
             animationComponent.AddAnimation((int)AnimationState.Walk, CreateWalkAnimation());
             animationComponent.SetAnimationState((int)AnimationState.Idle);
 
-            KeyboardMovementComponent movementComponent = Player.AddComponent<KeyboardMovementComponent>();
+            KeyboardMovementComponent movementComponent = player.AddComponent<KeyboardMovementComponent>();
             movementComponent.Speed = GameSettings.PlayerMovementSpeed;
             movementComponent.LookDirectionChange += animationComponent.OnLookDirectionChanged;
+
+            BoxColliderComponent colliderComponent = player.AddComponent<BoxColliderComponent>();
+            colliderComponent.SetColliderRect(GameSettings.PlayerColliderRect);
+            colliderComponent.SetColliderRectOffset(GameSettings.PlayerColliderRectOffset);
+
+            DebugCollisionHandlerComponent collisionHandlerComponent = player.AddComponent<DebugCollisionHandlerComponent>();
+
+            return player;
         }
 
         private Animation CreateIdleAnimation()
@@ -140,8 +179,27 @@ namespace Bullets
             // Nothing
         }
 
+        private float spawnDelayTime;
+
         public override void Update(float deltaTime)
         {
+            if (spawnDelayTime < 0.5f)
+            {
+                spawnDelayTime += deltaTime;
+            }
+            else
+            {
+                spawnDelayTime = 0;
+
+                GameObject bullet = CreateBullet();
+
+                Bullets.Enqueue(bullet);
+                if (Bullets.Count >= GameSettings.BulletMaxCount)
+                {
+                    Bullets.Dequeue().Destroy();
+                }
+            }
+
             GameObjectManager.Update(deltaTime);
         }
 
