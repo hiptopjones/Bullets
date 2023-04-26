@@ -25,7 +25,7 @@ namespace Bullets
         {
             CollisionTree = new Quadtree<ColliderComponent>
             {
-                BoundingBox = new FloatRect(0, 0, 800, 600),
+                BoundingBox = new FloatRect(400, 300, 800, 600),
                 MaxEntriesPerLevel = 5
             };
         }
@@ -58,7 +58,7 @@ namespace Bullets
                 CollisionTree.Add(quadtreeEntry);
             }
 
-            CollisionTree.DrawDebug();
+            //CollisionTree.DrawDebug();
 
             CheckCollisions();
         }

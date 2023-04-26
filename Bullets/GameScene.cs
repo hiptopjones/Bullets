@@ -34,11 +34,12 @@ namespace Bullets
             GameObject bullet = GameObjectManager.CreateGameObject(GameSettings.BulletObjectName);
 
             bullet.Transform.Position = new Vector2f(
-                Random.NextSingle() * GameSettings.WindowWidth,
-                Random.NextSingle() * GameSettings.WindowHeight);
+                Random.NextSingle() * 800 + 400, //GameSettings.WindowWidth,
+                Random.NextSingle() * 600 + 300); //GameSettings.WindowHeight);
 
             SpriteComponent spriteComponent = bullet.AddComponent<SpriteComponent>();
-            spriteComponent.TextureId = (int)GameSettings.TextureId.Bullet; 
+            spriteComponent.TextureId = (int)GameSettings.TextureId.Bullet;
+            spriteComponent.Origin = new Vector2f(GameSettings.BulletTextureWidth / 2, GameSettings.BulletTextureHeight / 2);
 
             VelocityMovementComponent movementComponent = bullet.AddComponent<VelocityMovementComponent>();
             movementComponent.Velocity = new Vector2f(
@@ -60,15 +61,10 @@ namespace Bullets
 
             SpriteComponent spriteComponent = player.AddComponent<SpriteComponent>();
             spriteComponent.TextureId = (int)GameSettings.TextureId.Player;
-
-            AnimationComponent animationComponent = player.AddComponent<AnimationComponent>();
-            animationComponent.AddAnimation((int)AnimationState.Idle, CreateIdleAnimation());
-            animationComponent.AddAnimation((int)AnimationState.Walk, CreateWalkAnimation());
-            animationComponent.SetAnimationState((int)AnimationState.Idle);
+            spriteComponent.Origin = new Vector2f(GameSettings.PlayerTextureWidth / 2, GameSettings.PlayerTextureHeight / 2);
 
             KeyboardMovementComponent movementComponent = player.AddComponent<KeyboardMovementComponent>();
             movementComponent.Speed = GameSettings.PlayerMovementSpeed;
-            movementComponent.LookDirectionChange += animationComponent.OnLookDirectionChanged;
 
             BoxColliderComponent colliderComponent = player.AddComponent<BoxColliderComponent>();
             colliderComponent.SetColliderRect(GameSettings.PlayerColliderRect);
@@ -77,91 +73,6 @@ namespace Bullets
             DebugCollisionHandlerComponent collisionHandlerComponent = player.AddComponent<DebugCollisionHandlerComponent>();
 
             return player;
-        }
-
-        private Animation CreateIdleAnimation()
-        {
-            int idleAnimationFrameWidth = 165;
-            int idleAnimationFrameHeight = 145;
-            float idleAnimationDisplayTime = 0.2f;
-
-            Animation idleAnimation = new Animation();
-
-            idleAnimation.AddFrame(new AnimationFrame
-            {
-                TextureId = (int)GameSettings.TextureId.Player,
-                TextureRect = new IntRect(600, 0, idleAnimationFrameWidth, idleAnimationFrameHeight),
-                DisplayTime = idleAnimationDisplayTime
-            });
-
-            idleAnimation.AddFrame(new AnimationFrame
-            {
-                TextureId = (int)GameSettings.TextureId.Player,
-                TextureRect = new IntRect(800, 0, idleAnimationFrameWidth, idleAnimationFrameHeight),
-                DisplayTime = idleAnimationDisplayTime
-            });
-
-            idleAnimation.AddFrame(new AnimationFrame
-            {
-                TextureId = (int)GameSettings.TextureId.Player,
-                TextureRect = new IntRect(0, 145, idleAnimationFrameWidth, idleAnimationFrameHeight),
-                DisplayTime = idleAnimationDisplayTime
-            });
-
-            idleAnimation.AddFrame(new AnimationFrame
-            {
-                TextureId = (int)GameSettings.TextureId.Player,
-                TextureRect = new IntRect(200, 145, idleAnimationFrameWidth, idleAnimationFrameHeight),
-                DisplayTime = idleAnimationDisplayTime
-            });
-
-            return idleAnimation;
-        }
-
-        private Animation CreateWalkAnimation()
-        {
-            int walkAnimationFrameWidth = 165;
-            int walkAnimationFrameHeight = 145;
-            float walkAnimationDisplayTime = 0.15f;
-
-            Animation walkAnimation = new Animation();
-
-            walkAnimation.AddFrame(new AnimationFrame
-            {
-                TextureId = (int)GameSettings.TextureId.Player,
-                TextureRect = new IntRect(600, 290, walkAnimationFrameWidth, walkAnimationFrameHeight),
-                DisplayTime = walkAnimationDisplayTime
-            });
-
-            walkAnimation.AddFrame(new AnimationFrame
-            {
-                TextureId = (int)GameSettings.TextureId.Player,
-                TextureRect = new IntRect(800, 290, walkAnimationFrameWidth, walkAnimationFrameHeight),
-                DisplayTime = walkAnimationDisplayTime
-            });
-
-            walkAnimation.AddFrame(new AnimationFrame
-            {
-                TextureId = (int)GameSettings.TextureId.Player,
-                TextureRect = new IntRect(0, 435, walkAnimationFrameWidth, walkAnimationFrameHeight),
-                DisplayTime = walkAnimationDisplayTime
-            });
-
-            walkAnimation.AddFrame(new AnimationFrame
-            {
-                TextureId = (int)GameSettings.TextureId.Player,
-                TextureRect = new IntRect(200, 435, walkAnimationFrameWidth, walkAnimationFrameHeight),
-                DisplayTime = walkAnimationDisplayTime
-            });
-
-            walkAnimation.AddFrame(new AnimationFrame
-            {
-                TextureId = (int)GameSettings.TextureId.Player,
-                TextureRect = new IntRect(400, 435, walkAnimationFrameWidth, walkAnimationFrameHeight),
-                DisplayTime = walkAnimationDisplayTime
-            });
-
-            return walkAnimation;
         }
 
         public override void OnDestroy()
@@ -183,7 +94,7 @@ namespace Bullets
 
         public override void Update(float deltaTime)
         {
-            if (spawnDelayTime < 0.5f)
+            if (spawnDelayTime < .5f)
             {
                 spawnDelayTime += deltaTime;
             }

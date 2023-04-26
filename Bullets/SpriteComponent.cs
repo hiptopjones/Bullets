@@ -1,4 +1,5 @@
 ﻿using SFML.Graphics;
+using SFML.System;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,7 @@ namespace Bullets
     {
         public int TextureId { get; set; }
         public IntRect TextureRect { get; set; }
+        public Vector2f Origin { get; set; }
 
         private Sprite Sprite { get; set; } = new Sprite();
 
@@ -36,6 +38,7 @@ namespace Bullets
         public override void LateUpdate(float deltaTime)
         {
             Sprite.Position = Owner.Transform.Position;
+            Sprite.Position -= Origin;
         }
 
         public override void Draw(GraphicsManager graphicsManager)

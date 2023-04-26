@@ -78,7 +78,7 @@ namespace Bullets
         public override FloatRect GetBoundingBox()
         {
             FloatRect rect = GetColliderRect();
-            Debug.DrawRect(rect, Color.Red);
+            //Debug.DrawRect(rect, Color.Red);
 
             return rect;
         }
