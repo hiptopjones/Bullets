@@ -30,6 +30,7 @@ namespace Bullets
             ServiceLocator.Instance.ProvideService(GameObjectManager);
 
             GameObject player = CreatePlayer();
+            ServiceLocator.Instance.ProvideService("Player", player);
 
             GameObject emitter = CreateBulletEmitter();
         }
