@@ -16,6 +16,7 @@ namespace Bullets
         private GraphicsManager GraphicsManager { get; set; }
         private TimeManager TimeManager { get; set; }
         private SceneManager SceneManager { get; set; }
+        private CoroutineManager CoroutineManager { get; set; }
 
         public bool IsRunning => GraphicsManager.IsOpen;
 
@@ -42,6 +43,9 @@ namespace Bullets
             GraphicsManager.KeyPressed += InputManager.OnKeyPressed;
             GraphicsManager.KeyReleased += InputManager.OnKeyReleased;
             ServiceLocator.Instance.ProvideService(GraphicsManager);
+
+            CoroutineManager = new CoroutineManager();
+            ServiceLocator.Instance.ProvideService(CoroutineManager);
 
             InitializeScenes();
         }
@@ -79,6 +83,7 @@ namespace Bullets
             float deltaTime = TimeManager.DeltaTime;
 
             SceneManager.Update(deltaTime);
+            CoroutineManager.Update(deltaTime);
         }
 
         public void LateUpdate()

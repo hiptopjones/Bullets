@@ -31,6 +31,7 @@ namespace Bullets
         // Player
         public const string PlayerObjectName = "Player";
         public const string PlayerTextureFileName = "Player.png";
+        public static readonly Vector2f PlayerStartPosition = new Vector2f(200, 200);
         public const float PlayerMovementSpeed = 500;
         public const float PlayerTextureWidth = 200;
         public const float PlayerTextureHeight = 244;
@@ -45,6 +46,9 @@ namespace Bullets
         public const float BulletTextureHeight = 40;
         public static readonly FloatRect BulletColliderRect = new FloatRect(0, 0, BulletTextureWidth, BulletTextureHeight);
         public static readonly Vector2f BulletColliderRectOffset = new Vector2f(0, 0);
+
+        // Bullet Emitter
+        public static readonly Vector2f BulletEmitterStartPosition = new Vector2f(WindowWidth / 2, WindowHeight / 2);
 
         // Resources
         public const string ResourcesDirectoryName = "Assets";

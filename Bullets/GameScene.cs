@@ -5,6 +5,7 @@ using SFML.Window;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,45 +20,24 @@ namespace Bullets
 
     internal class GameScene : Scene
     {
-        protected GameObjectManager GameObjectManager { get; } = new GameObjectManager();
+        protected GameObjectManager GameObjectManager { get; set; }
 
         private Queue<GameObject> Bullets { get; set; } = new Queue<GameObject>();
-        private Random Random { get; set; } = new Random();
 
         public override void OnCreate()
         {
+            GameObjectManager = new GameObjectManager();
+            ServiceLocator.Instance.ProvideService(GameObjectManager);
+
             GameObject player = CreatePlayer();
-        }
 
-        private GameObject CreateBullet()
-        {
-            GameObject bullet = GameObjectManager.CreateGameObject(GameSettings.BulletObjectName);
-
-            bullet.Transform.Position = new Vector2f(
-                Random.NextSingle() * 800 + 400, //GameSettings.WindowWidth,
-                Random.NextSingle() * 600 + 300); //GameSettings.WindowHeight);
-
-            SpriteComponent spriteComponent = bullet.AddComponent<SpriteComponent>();
-            spriteComponent.TextureId = (int)GameSettings.TextureId.Bullet;
-            spriteComponent.Origin = new Vector2f(GameSettings.BulletTextureWidth / 2, GameSettings.BulletTextureHeight / 2);
-
-            VelocityMovementComponent movementComponent = bullet.AddComponent<VelocityMovementComponent>();
-            movementComponent.Velocity = new Vector2f(
-                (Random.NextSingle() - 0.5f) * 100,
-                (Random.NextSingle() - 0.5f) * 100);
-
-            BoxColliderComponent colliderComponent = bullet.AddComponent<BoxColliderComponent>();
-            colliderComponent.SetColliderRect(GameSettings.BulletColliderRect);
-            colliderComponent.SetColliderRectOffset(GameSettings.BulletColliderRectOffset);
-
-            DebugCollisionHandlerComponent collisionHandlerComponent = bullet.AddComponent<DebugCollisionHandlerComponent>();
-
-            return bullet;
+            GameObject emitter = CreateBulletEmitter();
         }
 
         private GameObject CreatePlayer()
         {
             GameObject player = GameObjectManager.CreateGameObject(GameSettings.PlayerObjectName);
+            player.Transform.Position = GameSettings.PlayerStartPosition;
 
             SpriteComponent spriteComponent = player.AddComponent<SpriteComponent>();
             spriteComponent.TextureId = (int)GameSettings.TextureId.Player;
@@ -75,6 +55,16 @@ namespace Bullets
             return player;
         }
 
+        private GameObject CreateBulletEmitter()
+        {
+            GameObject bulletEmitter = GameObjectManager.CreateGameObject("Bullet Emitter");
+            bulletEmitter.Transform.Position = GameSettings.BulletEmitterStartPosition;
+
+            BulletEmitterComponent bulletEmitterComponent = bulletEmitter.AddComponent<BulletEmitterComponent>();
+
+            return bulletEmitter;
+        }
+
         public override void OnDestroy()
         {
             // Nothing
@@ -90,27 +80,8 @@ namespace Bullets
             // Nothing
         }
 
-        private float spawnDelayTime;
-
         public override void Update(float deltaTime)
         {
-            if (spawnDelayTime < .5f)
-            {
-                spawnDelayTime += deltaTime;
-            }
-            else
-            {
-                spawnDelayTime = 0;
-
-                GameObject bullet = CreateBullet();
-
-                Bullets.Enqueue(bullet);
-                if (Bullets.Count >= GameSettings.BulletMaxCount)
-                {
-                    Bullets.Dequeue().Destroy();
-                }
-            }
-
             GameObjectManager.Update(deltaTime);
         }
 

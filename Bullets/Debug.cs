@@ -1,4 +1,5 @@
-﻿using SFML.Graphics;
+﻿using NLog;
+using SFML.Graphics;
 using SFML.System;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,8 @@ namespace Bullets
 {
     internal static class Debug
     {
+        private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
+
         private static List<Drawable> Drawables { get; } = new List<Drawable>();
 
         private static Font _defaultFont;
@@ -33,6 +36,21 @@ namespace Bullets
             {
                 return GameSettings.DebugDefaultColor;
             }
+        }
+
+        public static void Log(string message)
+        {
+            Logger.Info(message);
+        }
+
+        public static void LogWarning(string message)
+        {
+            Logger.Warn(message);
+        }
+
+        public static void LogError(string message)
+        {
+            Logger.Error(message);
         }
 
         public static void Draw(GraphicsManager graphicsManager)

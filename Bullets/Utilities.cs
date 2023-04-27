@@ -10,7 +10,8 @@ namespace Bullets
     {
         public static void DeleteWithSwapAndPop<T>(List<T> collection, Predicate<T> deletePredicate)
         {
-            // Avoid foreach as we're mutating the list
+            // Avoiding "foreach" loop as we may mutate the list
+            // Avoiding "for" loop as we're using swap and pop
             int i = 0;
             while (i < collection.Count)
             {
