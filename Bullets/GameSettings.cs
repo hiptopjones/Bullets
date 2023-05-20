@@ -42,8 +42,8 @@ namespace Bullets
         // Player Bullet
         public const string PlayerBulletObjectName = "Player Bullet";
         public const string PlayerBulletTextureFileName = "Bullet.png";
-        public const float PlayerBulletTextureWidth = 10;
-        public const float PlayerBulletTextureHeight = 20;
+        public const float PlayerBulletTextureWidth = 26;
+        public const float PlayerBulletTextureHeight = 26;
         public static readonly FloatRect PlayerBulletColliderRect = new FloatRect(0, 0, PlayerBulletTextureWidth, PlayerBulletTextureHeight);
         public static readonly Vector2f PlayerBulletColliderRectOffset = new Vector2f(0, 0);
         public const float PlayerBulletMaxDistance = 1000;

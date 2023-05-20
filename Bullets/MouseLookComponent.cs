@@ -24,7 +24,7 @@ namespace Bullets
             float angleDegrees = MathF.Atan2(lookDirection.Y, lookDirection.X) * 180 / MathF.PI;
             Owner.Transform.Rotation = angleDegrees;
 
-            Debug.DrawLine(mousePosition, Owner.Transform.Position);
+            //Debug.DrawLine(mousePosition, Owner.Transform.Position);
         }
     }
 }

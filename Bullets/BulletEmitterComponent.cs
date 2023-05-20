@@ -1,4 +1,5 @@
 ﻿using SFML.System;
+using SFML.Window;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -40,7 +41,7 @@ namespace Bullets
 
         public override void Update(float deltaTime)
         {
-            if (InputManager.IsKeyDown(Key.Space))
+            if (InputManager.IsMouseButtonDown(Mouse.Button.Left))
             {
                 SpawnBullet();
             }

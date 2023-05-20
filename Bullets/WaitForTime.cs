@@ -10,6 +10,7 @@ namespace Bullets
     // https://blog.oliverbooth.dev/2021/04/27/how-do-unitys-coroutines-actually-work/
     internal class WaitForTime : IEnumerator
     {
+        // TODO: This should use TimeManager to get the current time, so that time scale is respected
         private readonly DateTime _endTime;
 
         public WaitForTime(TimeSpan waitTime)

@@ -15,6 +15,10 @@ namespace Bullets
         private HashSet<Keyboard.Key> KeyDown { get; set; } = new HashSet<Keyboard.Key>();
         private HashSet<Keyboard.Key> KeyUp { get; set; } = new HashSet<Keyboard.Key>();
 
+        private HashSet<Mouse.Button> MouseButtonPressed { get; set; } = new HashSet<Mouse.Button>();
+        private HashSet<Mouse.Button> MouseButtonDown { get; set; } = new HashSet<Mouse.Button>();
+        private HashSet<Mouse.Button> MouseButtonUp { get; set; } = new HashSet<Mouse.Button>();
+
         private Vector2f _mousePosition = new Vector2f();
         public Vector2f MousePosition
         {
@@ -26,6 +30,9 @@ namespace Bullets
             // These start fresh on every frame
             KeyUp.Clear();
             KeyDown.Clear();
+
+            MouseButtonUp.Clear();
+            MouseButtonDown.Clear();
         }
 
         public bool IsKeyPressed(Keyboard.Key keycode)
@@ -64,6 +71,39 @@ namespace Bullets
         public void OnMouseMoved(object sender, MouseMoveEventArgs e)
         {
             _mousePosition = new Vector2f(e.X, e.Y);
+        }
+
+        public bool IsMouseButtonPressed(Mouse.Button button)
+        {
+            return MouseButtonPressed.Contains(button);
+        }
+
+        public bool IsMouseButtonDown(Mouse.Button button)
+        {
+            return MouseButtonDown.Contains(button);
+        }
+
+        public bool IsMouseButtonUp(Mouse.Button button)
+        {
+            return MouseButtonUp.Contains(button);
+        }
+
+        public void OnMouseButtonPressed(object sender, MouseButtonEventArgs e)
+        {
+            if (!MouseButtonPressed.Contains(e.Button))
+            {
+                MouseButtonPressed.Add(e.Button);
+                MouseButtonDown.Add(e.Button);
+            }
+        }
+
+        public void OnMouseButtonReleased(object sender, MouseButtonEventArgs e)
+        {
+            if (MouseButtonPressed.Contains(e.Button))
+            {
+                MouseButtonPressed.Remove(e.Button);
+                MouseButtonUp.Add(e.Button);
+            }
         }
     }
 }

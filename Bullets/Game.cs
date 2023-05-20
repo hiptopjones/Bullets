@@ -44,6 +44,8 @@ namespace Bullets
             GraphicsManager.KeyPressed += InputManager.OnKeyPressed;
             GraphicsManager.KeyReleased += InputManager.OnKeyReleased;
             GraphicsManager.MouseMoved += InputManager.OnMouseMoved;
+            GraphicsManager.MouseButtonPressed += InputManager.OnMouseButtonPressed;
+            GraphicsManager.MouseButtonReleased += InputManager.OnMouseButtonReleased;
             ServiceLocator.Instance.ProvideService(GraphicsManager);
 
             CoroutineManager = new CoroutineManager();

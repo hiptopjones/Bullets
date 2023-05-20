@@ -18,6 +18,8 @@ namespace Bullets
 
         private GameObject Player { get; set; }
 
+        private bool IsPatternActive { get; set; }
+
         public override void Awake()
         {
             GameObjectManager = ServiceLocator.Instance.GetService<GameObjectManager>();
@@ -47,17 +49,30 @@ namespace Bullets
 
         public override void Update(float deltaTime)
         {
+            if (IsPatternActive)
+            {
+                return;
+            }
+
             if (InputManager.IsKeyDown(Key.Num1))
             {
+                IsPatternActive = true;
                 CoroutineManager.StartCoroutine(LineEmitterComponent());
             }
             else if (InputManager.IsKeyDown(Key.Num2))
             {
+                IsPatternActive = true;
                 CoroutineManager.StartCoroutine(SpiralEmitterCoroutine());
             }
             else if (InputManager.IsKeyDown(Key.Num3))
             {
+                IsPatternActive = true;
                 CoroutineManager.StartCoroutine(RingEmitterCoroutine());
+            }
+            else if (InputManager.IsKeyDown(Key.Num4))
+            {
+                IsPatternActive = true;
+                CoroutineManager.StartCoroutine(PulseRingEmitterCoroutine());
             }
         }
 
@@ -79,6 +94,8 @@ namespace Bullets
                     bulletSpeed * MathF.Sin(angleRadians));
 
             yield return null;
+
+            IsPatternActive = false;
         }
 
         private IEnumerator LineEmitterComponent()
@@ -104,6 +121,8 @@ namespace Bullets
 
                 yield return new WaitForTime(TimeSpan.FromSeconds(0.2f));
             }
+
+            IsPatternActive = false;
         }
 
         private IEnumerator SpiralEmitterCoroutine()
@@ -139,6 +158,8 @@ namespace Bullets
 
                 yield return new WaitForTime(TimeSpan.FromSeconds(0.1f));
             }
+
+            IsPatternActive = false;
         }
 
         private IEnumerator RingEmitterCoroutine()
@@ -170,6 +191,8 @@ namespace Bullets
 
                 yield return new WaitForTime(TimeSpan.FromSeconds(0.5f));
             }
+
+            IsPatternActive = false;
         }
 
         private IEnumerator PulseRingEmitterCoroutine()
@@ -213,6 +236,8 @@ namespace Bullets
 
                 yield return new WaitForFrame();
             }
+
+            IsPatternActive = false;
         }
 
         private GameObject CreateBullet()

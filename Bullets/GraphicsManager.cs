@@ -13,6 +13,8 @@ namespace Bullets
         public event EventHandler<KeyEventArgs> KeyPressed;
         public event EventHandler<KeyEventArgs> KeyReleased;
         public event EventHandler<MouseMoveEventArgs> MouseMoved;
+        public event EventHandler<MouseButtonEventArgs> MouseButtonPressed;
+        public event EventHandler<MouseButtonEventArgs> MouseButtonReleased;
 
         public bool IsOpen => RenderWindow.IsOpen;
 
@@ -37,6 +39,8 @@ namespace Bullets
             RenderWindow.KeyPressed += OnKeyPressed;
             RenderWindow.KeyReleased += OnKeyReleased;
             RenderWindow.MouseMoved += OnMouseMoved;
+            RenderWindow.MouseButtonPressed += OnMouseButtonPressed;
+            RenderWindow.MouseButtonReleased += OnMouseButtonReleased;
         }
 
         public void ProcessEvents()
@@ -85,6 +89,16 @@ namespace Bullets
         private void OnMouseMoved(object sender, MouseMoveEventArgs e)
         {
             MouseMoved?.Invoke(sender, e);
+        }
+
+        private void OnMouseButtonPressed(object sender, MouseButtonEventArgs e)
+        {
+            MouseButtonPressed?.Invoke(sender, e);
+        }
+
+        private void OnMouseButtonReleased(object sender, MouseButtonEventArgs e)
+        {
+            MouseButtonReleased?.Invoke(sender, e);
         }
 
     }
