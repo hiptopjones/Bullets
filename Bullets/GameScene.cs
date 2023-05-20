@@ -43,25 +43,37 @@ namespace Bullets
             SpriteComponent spriteComponent = player.AddComponent<SpriteComponent>();
             spriteComponent.TextureId = (int)GameSettings.TextureId.Player;
             spriteComponent.Origin = new Vector2f(GameSettings.PlayerTextureWidth / 2, GameSettings.PlayerTextureHeight / 2);
+            spriteComponent.RotationOffset = 90;
 
             KeyboardMovementComponent movementComponent = player.AddComponent<KeyboardMovementComponent>();
             movementComponent.Speed = GameSettings.PlayerMovementSpeed;
+
+            //KeyboardLookComponent lookComponent = player.AddComponent<KeyboardLookComponent>();
+            //lookComponent.LookSpeed = GameSettings.PlayerRotationSpeed;
+
+            MouseLookComponent lookComponent = player.AddComponent<MouseLookComponent>();
 
             BoxColliderComponent colliderComponent = player.AddComponent<BoxColliderComponent>();
             colliderComponent.SetColliderRect(GameSettings.PlayerColliderRect);
             colliderComponent.SetColliderRectOffset(GameSettings.PlayerColliderRectOffset);
 
-            DebugCollisionHandlerComponent collisionHandlerComponent = player.AddComponent<DebugCollisionHandlerComponent>();
+            BulletEmitterComponent bulletEmitterComponent = player.AddComponent<BulletEmitterComponent>();
+
+            //DebugCollisionHandlerComponent collisionHandlerComponent = player.AddComponent<DebugCollisionHandlerComponent>();
 
             return player;
         }
 
         private GameObject CreateBulletEmitter()
         {
-            GameObject bulletEmitter = GameObjectManager.CreateGameObject("Bullet Emitter");
-            bulletEmitter.Transform.Position = GameSettings.BulletEmitterStartPosition;
+            GameObject bulletEmitter = GameObjectManager.CreateGameObject("Bullet Pattern Emitter");
+            bulletEmitter.Transform.Position = GameSettings.TurretStartPosition;
 
-            BulletEmitterComponent bulletEmitterComponent = bulletEmitter.AddComponent<BulletEmitterComponent>();
+            SpriteComponent spriteComponent = bulletEmitter.AddComponent<SpriteComponent>();
+            spriteComponent.TextureId = (int)GameSettings.TextureId.Turret;
+            spriteComponent.Origin = new Vector2f(GameSettings.TurretTextureWidth / 2, GameSettings.TurretTextureHeight / 2);
+
+            BulletPatternEmitterComponent bulletPatternComponent = bulletEmitter.AddComponent<BulletPatternEmitterComponent>();
 
             return bulletEmitter;
         }

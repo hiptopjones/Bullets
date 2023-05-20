@@ -9,8 +9,11 @@
 
   <ItemGroup>
     <None Remove="Assets\Textures\Bullet.png" />
+    <None Remove="Assets\Textures\Orb.png" />
     <None Remove="Assets\Textures\Player.png" />
+    <None Remove="Assets\Textures\Player2.png" />
     <None Remove="Assets\Textures\Splash.png" />
+    <None Remove="Assets\Textures\Turret.png" />
     <None Remove="Assets\Textures\unispace rg.ttf" />
     <None Remove="Assets\Textures\Viking.png" />
     <None Remove="NLog.config" />
@@ -20,13 +23,22 @@
     <Content Include="Assets\Textures\Bullet.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Assets\Textures\Orb.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Assets\Textures\Player.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Textures\Player2.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Textures\Splash.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Fonts\unispace rg.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Textures\Turret.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="NLog.config">

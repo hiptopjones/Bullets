@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static SFML.Window.Keyboard;
 
 namespace Bullets
 {
@@ -42,6 +43,7 @@ namespace Bullets
             GraphicsManager = new GraphicsManager(GameSettings.GameName, GameSettings.WindowWidth, GameSettings.WindowHeight);
             GraphicsManager.KeyPressed += InputManager.OnKeyPressed;
             GraphicsManager.KeyReleased += InputManager.OnKeyReleased;
+            GraphicsManager.MouseMoved += InputManager.OnMouseMoved;
             ServiceLocator.Instance.ProvideService(GraphicsManager);
 
             CoroutineManager = new CoroutineManager();
@@ -72,7 +74,7 @@ namespace Bullets
         {
             GraphicsManager.ProcessEvents();
 
-            if (InputManager.IsKeyPressed(InputManager.Key.Escape))
+            if (InputManager.IsKeyPressed(Key.Escape))
             {
                 GraphicsManager.Close();
             }

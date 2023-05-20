@@ -14,6 +14,7 @@ namespace Bullets
         public int TextureId { get; set; }
         public IntRect TextureRect { get; set; }
         public Vector2f Origin { get; set; }
+        public float RotationOffset { get; set; }
 
         private Sprite Sprite { get; set; } = new Sprite();
 
@@ -37,8 +38,12 @@ namespace Bullets
 
         public override void LateUpdate(float deltaTime)
         {
+            Sprite.Origin = Origin;
+
             Sprite.Position = Owner.Transform.Position;
-            Sprite.Position -= Origin;
+            Sprite.Rotation = Owner.Transform.Rotation + RotationOffset;
+            Sprite.Scale = Owner.Transform.Scale;
+
         }
 
         public override void Draw(GraphicsManager graphicsManager)

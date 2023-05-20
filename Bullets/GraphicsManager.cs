@@ -12,6 +12,7 @@ namespace Bullets
     {
         public event EventHandler<KeyEventArgs> KeyPressed;
         public event EventHandler<KeyEventArgs> KeyReleased;
+        public event EventHandler<MouseMoveEventArgs> MouseMoved;
 
         public bool IsOpen => RenderWindow.IsOpen;
 
@@ -35,6 +36,7 @@ namespace Bullets
             RenderWindow.Closed += OnClosed;
             RenderWindow.KeyPressed += OnKeyPressed;
             RenderWindow.KeyReleased += OnKeyReleased;
+            RenderWindow.MouseMoved += OnMouseMoved;
         }
 
         public void ProcessEvents()
@@ -44,7 +46,7 @@ namespace Bullets
 
         public void BeginDraw()
         {
-            RenderWindow.Clear(Color.White);
+            RenderWindow.Clear(GameSettings.WindowClearColor);
         }
 
         public void Draw(Drawable drawable)
@@ -79,5 +81,11 @@ namespace Bullets
         {
             KeyReleased?.Invoke(sender, e);
         }
+
+        private void OnMouseMoved(object sender, MouseMoveEventArgs e)
+        {
+            MouseMoved?.Invoke(sender, e);
+        }
+
     }
 }

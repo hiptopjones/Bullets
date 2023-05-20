@@ -105,21 +105,5 @@ namespace Bullets
 
             SpriteComponent.RefreshTexture();
         }
-
-        internal void OnLookDirectionChanged(object sender, LookDirectionEventArgs e)
-        {
-            //Logger.Info($"OnLookDirectionChanged: {e.LookDirection.X}, {e.LookDirection.Y}");
-
-            SpriteComponent.IsHorizontalFlipEnabled = (e.LookDirection.X < 0);
-
-            if (e.LookDirection.X != 0 || e.LookDirection.Y != 0)
-            {
-                SetAnimationState((int)AnimationState.Walk);
-            }
-            else
-            {
-                SetAnimationState((int)AnimationState.Idle);
-            }
-        }
     }
 }

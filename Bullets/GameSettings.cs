@@ -15,7 +15,7 @@ namespace Bullets
         // Window
         public const int WindowWidth = 1600;
         public const int WindowHeight = 1200;
-        public static readonly Color WindowClearColor = Color.White;
+        public static readonly Color WindowClearColor = new Color(30, 30, 30);
 
         // Stats
         public const int StatsFpsSampleCount = 100;
@@ -30,25 +30,40 @@ namespace Bullets
 
         // Player
         public const string PlayerObjectName = "Player";
-        public const string PlayerTextureFileName = "Player.png";
+        public const string PlayerTextureFileName = "Player2.png";
         public static readonly Vector2f PlayerStartPosition = new Vector2f(200, 200);
         public const float PlayerMovementSpeed = 500;
-        public const float PlayerTextureWidth = 200;
-        public const float PlayerTextureHeight = 244;
+        public const float PlayerRotationSpeed = 360;
+        public const float PlayerTextureWidth = 100;
+        public const float PlayerTextureHeight = 99;
         public static readonly FloatRect PlayerColliderRect = new FloatRect(0, 0, PlayerTextureWidth, PlayerTextureHeight);
         public static readonly Vector2f PlayerColliderRectOffset = new Vector2f(0, 0);
 
-        // Bullet
-        public const string BulletObjectName = "Bullet";
-        public const string BulletTextureFileName = "Bullet.png";
-        public const int BulletMaxCount = 100;
-        public const float BulletTextureWidth = 40;
-        public const float BulletTextureHeight = 40;
-        public static readonly FloatRect BulletColliderRect = new FloatRect(0, 0, BulletTextureWidth, BulletTextureHeight);
-        public static readonly Vector2f BulletColliderRectOffset = new Vector2f(0, 0);
+        // Player Bullet
+        public const string PlayerBulletObjectName = "Player Bullet";
+        public const string PlayerBulletTextureFileName = "Bullet.png";
+        public const float PlayerBulletTextureWidth = 10;
+        public const float PlayerBulletTextureHeight = 20;
+        public static readonly FloatRect PlayerBulletColliderRect = new FloatRect(0, 0, PlayerBulletTextureWidth, PlayerBulletTextureHeight);
+        public static readonly Vector2f PlayerBulletColliderRectOffset = new Vector2f(0, 0);
+        public const float PlayerBulletMaxDistance = 1000;
 
-        // Bullet Emitter
-        public static readonly Vector2f BulletEmitterStartPosition = new Vector2f(WindowWidth / 2, WindowHeight / 2);
+        // Enemy Bullet Pattern
+        public const string EnemyBulletObjectName = "Enemy Bullet";
+        public const string EnemyBulletTextureFileName = "Orb.png";
+        public const int EnemyBulletMaxCount = 100;
+        public const float EnemyBulletTextureWidth = 40;
+        public const float EnemyBulletTextureHeight = 40;
+        public static readonly FloatRect EnemyBulletColliderRect = new FloatRect(0, 0, EnemyBulletTextureWidth, EnemyBulletTextureHeight);
+        public static readonly Vector2f EnemyBulletColliderRectOffset = new Vector2f(0, 0);
+        public const float EnemyBulletMaxDistance = 1000;
+        public const float EnemyBulletStartRadialOffset = 75;
+
+        // Enemy Turret
+        public const string TurretTextureFileName = "Turret.png";
+        public static readonly Vector2f TurretStartPosition = new Vector2f(WindowWidth / 2, WindowHeight / 2);
+        public const int TurretTextureWidth = 100;
+        public const int TurretTextureHeight = 100;
 
         // Resources
         public const string ResourcesDirectoryName = "Assets";
@@ -60,14 +75,18 @@ namespace Bullets
         {
             SplashScreen,
             Player,
-            Bullet
+            PlayerBullet,
+            EnemyBullet,
+            Turret
         }
 
         public static readonly Dictionary<int, string> Textures = new Dictionary<int, string>
         {
             { (int)TextureId.SplashScreen, SplashScreenTextureFileName },
             { (int)TextureId.Player, PlayerTextureFileName },
-            { (int)TextureId.Bullet, BulletTextureFileName },
+            { (int)TextureId.EnemyBullet, EnemyBulletTextureFileName },
+            { (int)TextureId.PlayerBullet, PlayerBulletTextureFileName },
+            { (int)TextureId.Turret, TurretTextureFileName },
         };
 
         // Fonts
@@ -80,5 +99,6 @@ namespace Bullets
         {
             { (int)FontId.Debug, DebugFontFileName },
         };
+
     }
 }
