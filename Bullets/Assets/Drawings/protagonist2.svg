@@ -57,7 +57,7 @@
        x2="52.230213"
        y2="71.223022"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="translate(-0.08902878,-1.6176429)" />
+       gradientTransform="translate(13.732733,-107.62054)" />
   </defs>
   <g
      inkscape:label="Layer 1"
@@ -68,18 +68,22 @@
        id="rect7252"
        width="3.9783659"
        height="11.74565"
-       x="44.424492"
-       y="41.02861"
-       ry="0" />
+       x="58.246254"
+       y="-64.974289"
+       ry="0"
+       inkscape:export-filename="..\Textures\Player.png"
+       inkscape:export-xdpi="66.380127"
+       inkscape:export-ydpi="66.380127"
+       transform="rotate(90)" />
     <rect
        style="fill:#666666;fill-opacity:1;stroke-width:0.253831"
        id="rect2197"
        width="42.59148"
        height="13.665715"
-       x="-16.012323"
-       y="72.134354"
+       x="51.578083"
+       y="-10.685883"
        ry="6.8328576"
-       transform="rotate(-31.789313)"
+       transform="rotate(58.210687)"
        inkscape:export-filename="..\Textures\Player2.png"
        inkscape:export-xdpi="66.380127"
        inkscape:export-ydpi="66.380127" />
@@ -88,25 +92,27 @@
        id="rect1202"
        width="4.9856114"
        height="14.719422"
-       x="43.920868"
-       y="44.158268"
-       ry="0" />
+       x="57.74263"
+       y="-61.844627"
+       ry="0"
+       transform="rotate(90)" />
     <ellipse
-       style="fill:#4d4d4d;fill-opacity:1;stroke-width:0.130902"
+       style="fill:#4d4d4d;fill-opacity:1;stroke-width:0.122475"
        id="circle592"
-       cx="65.088303"
-       cy="-44.155689"
-       rx="11.736204"
-       ry="9.7346201"
-       transform="matrix(0.03517894,0.99938103,-0.9992808,0.03791945,0,0)" />
+       cx="-41.992188"
+       cy="-61.757092"
+       rx="10.980676"
+       ry="9.1079454"
+       transform="matrix(-0.99938103,0.03517894,-0.03791945,-0.9992808,0,0)" />
     <circle
        style="fill:url(#linearGradient7047);fill-opacity:1;stroke-width:0.110485"
        id="circle594"
-       cx="46.443348"
-       cy="63.195305"
+       cx="60.26511"
+       cy="-42.80759"
        r="9.0215797"
        inkscape:export-filename="..\Textures\Player2.png"
        inkscape:export-xdpi="21.24164"
-       inkscape:export-ydpi="21.24164" />
+       inkscape:export-ydpi="21.24164"
+       transform="rotate(90)" />
   </g>
 </svg>

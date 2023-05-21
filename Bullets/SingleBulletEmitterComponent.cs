@@ -58,6 +58,11 @@ namespace Bullets
             float angleDegrees = Player.Transform.Rotation;
             float angleRadians = angleDegrees * MathF.PI / 180;
 
+            // x = r * cos(a), y = r * sin(a)
+            float radius = GameSettings.PlayerBulletSpawnOffset.Magnitude();
+            Vector2f bulletSpawnOffset = new Vector2f(radius * MathF.Cos(angleRadians), radius * MathF.Sin(angleRadians));
+            bullet.Transform.Position += bulletSpawnOffset;
+
             bullet.GetComponent<VelocityMovementComponent>().Velocity = new Vector2f(
                     bulletSpeed * MathF.Cos(angleRadians),
                     bulletSpeed * MathF.Sin(angleRadians));
@@ -72,7 +77,6 @@ namespace Bullets
             SpriteComponent spriteComponent = bullet.GetComponent<SpriteComponent>();
             spriteComponent.TextureId = (int)GameSettings.TextureId.PlayerBullet;
             spriteComponent.Origin = new Vector2f(GameSettings.PlayerBulletTextureWidth / 2, GameSettings.PlayerBulletTextureHeight / 2);
-            spriteComponent.RotationOffset = 90;
 
             BoxColliderComponent colliderComponent = bullet.GetComponent<BoxColliderComponent>();
             colliderComponent.SetColliderRect(GameSettings.PlayerBulletColliderRect);

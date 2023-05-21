@@ -54,11 +54,12 @@ namespace Bullets
         public static readonly Vector2f PlayerStartPosition = new Vector2f(200, 200);
         public const float PlayerMovementSpeed = 500;
         public const float PlayerRotationSpeed = 360;
-        public const float PlayerTextureWidth = 100;
-        public const float PlayerTextureHeight = 99;
+        public const float PlayerTextureWidth = 99;
+        public const float PlayerTextureHeight = 100;
         public static readonly FloatRect PlayerColliderRect = new FloatRect(0, 0, PlayerTextureWidth, PlayerTextureHeight);
         public static readonly Vector2f PlayerColliderRectOffset = new Vector2f(0, 0);
         public const int PlayerCollisionLayer = (int)CollisionLayer.Player;
+        public static readonly Vector2f PlayerBulletSpawnOffset = new Vector2f(PlayerTextureWidth / 2, 0);
 
         // Player Bullet
         public const string PlayerBulletObjectName = "Player Bullet";

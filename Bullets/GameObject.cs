@@ -42,6 +42,8 @@ namespace Bullets
         // Can only be set through Destroy()
         public bool IsAlive { get; private set; } = true;
 
+        public bool IsLocked { get; set; }
+
         public Action<GameObject> OnDestroyed;
 
         private List<Component> Components { get; } = new List<Component>();
@@ -134,6 +136,11 @@ namespace Bullets
 
         public T AddComponent<T>() where T : Component, new()
         {
+            if (IsLocked)
+            {
+                throw new Exception("Object has been locked");
+            }
+
             T component = Components.OfType<T>().SingleOrDefault();
             if (component == null)
             {

@@ -42,6 +42,9 @@ namespace Bullets
             else
             {
                 obj = GameObjectFactory();
+
+                // Ensure no components are added after the factory, which is intended to help prevent stupid mistakes
+                obj.IsLocked = true;
             }
 
             PooledObjectStates[obj] = PoolState.Active;

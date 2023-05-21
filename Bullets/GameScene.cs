@@ -58,7 +58,6 @@ namespace Bullets
             SpriteComponent spriteComponent = player.AddComponent<SpriteComponent>();
             spriteComponent.TextureId = (int)GameSettings.TextureId.Player;
             spriteComponent.Origin = new Vector2f(GameSettings.PlayerTextureWidth / 2, GameSettings.PlayerTextureHeight / 2);
-            spriteComponent.RotationOffset = 90;
 
             KeyboardMovementComponent movementComponent = player.AddComponent<KeyboardMovementComponent>();
             movementComponent.Speed = GameSettings.PlayerMovementSpeed;
@@ -75,7 +74,7 @@ namespace Bullets
 
             SingleBulletEmitterComponent bulletEmitterComponent = player.AddComponent<SingleBulletEmitterComponent>();
 
-            DebugCollisionHandlerComponent collisionHandlerComponent = player.AddComponent<DebugCollisionHandlerComponent>();
+            //DebugCollisionHandlerComponent collisionHandlerComponent = player.AddComponent<DebugCollisionHandlerComponent>();
 
             return player;
         }
@@ -104,7 +103,7 @@ namespace Bullets
             bulletEmitterComponent.Target = player;
             bulletEmitterComponent.PatternInterval = 3;
 
-            DebugCollisionHandlerComponent collisionHandlerComponent = enemy.AddComponent<DebugCollisionHandlerComponent>();
+            //DebugCollisionHandlerComponent collisionHandlerComponent = enemy.AddComponent<DebugCollisionHandlerComponent>();
 
             return enemy;
         }
