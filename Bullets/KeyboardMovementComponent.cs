@@ -21,27 +21,29 @@ namespace Bullets
 
         public override void Update(float deltaTime)
         {
-            float xSpeed = 0;
+            float xDirection = 0;
             if (InputManager.IsKeyPressed(Key.A))
             {
-                xSpeed = -Speed;
+                xDirection = -1;
             }
             else if (InputManager.IsKeyPressed(Key.D))
             {
-                xSpeed = Speed;
+                xDirection = 1;
             }
 
-            float ySpeed = 0;
+            float yDirection = 0;
             if (InputManager.IsKeyPressed(Key.W))
             {
-                ySpeed = -Speed;
+                yDirection = -1;
             }
             if (InputManager.IsKeyPressed(Key.S))
             {
-                ySpeed = Speed;
+                yDirection = 1;
             }
 
-            Owner.Transform.Position += new Vector2f(xSpeed, ySpeed) * deltaTime;
+            // Normalize to avoid going faster on diagonal than along axes
+            Vector2f direction = new Vector2f(xDirection, yDirection);
+            Owner.Transform.Position += direction.Normalize() * Speed * deltaTime;
         }
     }
 }

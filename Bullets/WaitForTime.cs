@@ -10,15 +10,22 @@ namespace Bullets
     // https://blog.oliverbooth.dev/2021/04/27/how-do-unitys-coroutines-actually-work/
     internal class WaitForTime : IEnumerator
     {
-        // TODO: This should use TimeManager to get the current time, so that time scale is respected
-        private readonly DateTime _endTime;
+        private static TimeManager TimeManager { get; set; }
+
+        private readonly float _endTime;
+
+        static WaitForTime()
+        {
+            // NOTE: Assumes that WaitForTime will not be referenced until after the game is initialized
+            TimeManager = ServiceLocator.Instance.GetService<TimeManager>();
+        }
 
         public WaitForTime(TimeSpan waitTime)
         {
-            _endTime = DateTime.Now + waitTime;
+            _endTime = TimeManager.TotalTime + (float)waitTime.TotalSeconds;
         }
 
-        public bool MoveNext() => DateTime.Now < _endTime;
+        public bool MoveNext() => TimeManager.TotalTime < _endTime;
 
         public void Reset() { }
 

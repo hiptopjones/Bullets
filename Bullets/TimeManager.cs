@@ -30,6 +30,7 @@ namespace Bullets
         {
             Time time = Clock.Restart();
             DeltaTime = time.AsSeconds() * TimeScale;
+            TotalTime += DeltaTime;
             
             // TODO: Avoid in production
             CalculateFps();

@@ -75,6 +75,11 @@ namespace Bullets
                 {
                     ColliderComponent otherColliderComponent = quadtreeEntry.Context;
 
+                    if (!AreLayersCollidable(colliderComponent.LayerId, otherColliderComponent.LayerId))
+                    {
+                        continue;
+                    }
+
                     // Don't collide with ourselves
                     if (colliderComponent == otherColliderComponent)
                     {
@@ -112,6 +117,11 @@ namespace Bullets
                     }
                 }
             }
+        }
+
+        private bool AreLayersCollidable(int layerId1, int layerId2)
+        {
+            return GameSettings.Collidables.Contains(Utilities.MakeKey(layerId1, layerId2));
         }
 
         private void NotifyCollisionEvent(bool isColliding, bool wasColliding, ColliderComponent sourceColliderComponent, ColliderComponent targetColliderComponent)

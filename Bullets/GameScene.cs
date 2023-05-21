@@ -1,13 +1,5 @@
-﻿using NLog;
-using SFML.Graphics;
-using SFML.System;
-using SFML.Window;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using SFML.System;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Bullets
 {
@@ -32,7 +24,7 @@ namespace Bullets
             GameObject player = CreatePlayer();
             ServiceLocator.Instance.ProvideService("Player", player);
 
-            GameObject emitter = CreateBulletEmitter();
+            GameObject enemy = CreateEnemy();
         }
 
         private GameObject CreatePlayer()
@@ -56,26 +48,42 @@ namespace Bullets
             BoxColliderComponent colliderComponent = player.AddComponent<BoxColliderComponent>();
             colliderComponent.SetColliderRect(GameSettings.PlayerColliderRect);
             colliderComponent.SetColliderRectOffset(GameSettings.PlayerColliderRectOffset);
+            colliderComponent.LayerId = (int)GameSettings.PlayerCollisionLayer;
 
-            BulletEmitterComponent bulletEmitterComponent = player.AddComponent<BulletEmitterComponent>();
+            SingleBulletEmitterComponent bulletEmitterComponent = player.AddComponent<SingleBulletEmitterComponent>();
 
-            //DebugCollisionHandlerComponent collisionHandlerComponent = player.AddComponent<DebugCollisionHandlerComponent>();
+            DebugCollisionHandlerComponent collisionHandlerComponent = player.AddComponent<DebugCollisionHandlerComponent>();
 
             return player;
         }
 
-        private GameObject CreateBulletEmitter()
+        private GameObject CreateEnemy()
         {
-            GameObject bulletEmitter = GameObjectManager.CreateGameObject("Bullet Pattern Emitter");
-            bulletEmitter.Transform.Position = GameSettings.TurretStartPosition;
+            GameObject enemy = GameObjectManager.CreateGameObject(GameSettings.EnemyTurretObjectName);
+            enemy.Transform.Position = GameSettings.EnemyTurretStartPosition;
 
-            SpriteComponent spriteComponent = bulletEmitter.AddComponent<SpriteComponent>();
-            spriteComponent.TextureId = (int)GameSettings.TextureId.Turret;
-            spriteComponent.Origin = new Vector2f(GameSettings.TurretTextureWidth / 2, GameSettings.TurretTextureHeight / 2);
+            SpriteComponent spriteComponent = enemy.AddComponent<SpriteComponent>();
+            spriteComponent.TextureId = (int)GameSettings.TextureId.EnemyTurret;
+            spriteComponent.Origin = new Vector2f(GameSettings.EnemyTurretTextureWidth / 2, GameSettings.EnemyTurretTextureHeight / 2);
 
-            BulletPatternEmitterComponent bulletPatternComponent = bulletEmitter.AddComponent<BulletPatternEmitterComponent>();
+            GameObject player = ServiceLocator.Instance.GetService<GameObject>("Player");
 
-            return bulletEmitter;
+            EnemyMovementComponent movementComponent = enemy.AddComponent<EnemyMovementComponent>();
+            movementComponent.Speed = GameSettings.EnemyTurretMovementSpeed;
+            movementComponent.Target = player;
+
+            BoxColliderComponent colliderComponent = enemy.AddComponent<BoxColliderComponent>();
+            colliderComponent.SetColliderRect(GameSettings.EnemyTurretColliderRect);
+            colliderComponent.SetColliderRectOffset(GameSettings.EnemyTurretColliderRectOffset);
+            colliderComponent.LayerId = (int)GameSettings.EnemyTurretCollisionLayer;
+
+            ArcPatternBulletEmitterComponent bulletEmitterComponent = enemy.AddComponent<ArcPatternBulletEmitterComponent>();
+            bulletEmitterComponent.Target = player;
+            bulletEmitterComponent.PatternInterval = 3;
+
+            DebugCollisionHandlerComponent collisionHandlerComponent = enemy.AddComponent<DebugCollisionHandlerComponent>();
+
+            return enemy;
         }
 
         public override void OnDestroy()

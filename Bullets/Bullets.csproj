@@ -9,9 +9,10 @@
 
   <ItemGroup>
     <None Remove="Assets\Textures\Bullet.png" />
+    <None Remove="Assets\Textures\MediumRedBullet.png" />
     <None Remove="Assets\Textures\Orb.png" />
     <None Remove="Assets\Textures\Player.png" />
-    <None Remove="Assets\Textures\Player2.png" />
+    <None Remove="Assets\Textures\SmallYellowBullet.png" />
     <None Remove="Assets\Textures\Splash.png" />
     <None Remove="Assets\Textures\Turret.png" />
     <None Remove="Assets\Textures\unispace rg.ttf" />
@@ -20,16 +21,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Assets\Textures\Bullet.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Textures\Orb.png">
+    <Content Include="Assets\Textures\MediumRedBullet.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Textures\Player.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\Textures\Player2.png">
+    <Content Include="Assets\Textures\SmallYellowBullet.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Textures\Splash.png">

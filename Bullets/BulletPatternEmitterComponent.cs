@@ -74,6 +74,11 @@ namespace Bullets
                 IsPatternActive = true;
                 CoroutineManager.StartCoroutine(PulseRingEmitterCoroutine());
             }
+            else if (InputManager.IsKeyDown(Key.Num5))
+            {
+                IsPatternActive = true;
+                CoroutineManager.StartCoroutine(ArcEmitterCoroutine());
+            }
         }
 
         private IEnumerator SingleEmitterComponent()
@@ -195,6 +200,42 @@ namespace Bullets
             IsPatternActive = false;
         }
 
+        private IEnumerator ArcEmitterCoroutine()
+        {
+            const float arcAngleDegrees = 120;
+
+            const float bulletSpeed = 500;
+            const int bulletCount = 20;
+
+            // Angle the arc at the player
+            Vector2f direction = Player.Transform.Position - Owner.Transform.Position;
+
+            float targetAngleDegrees = MathF.Atan2(direction.Y, direction.X) * 180 / MathF.PI;
+            float minAngleDegrees = targetAngleDegrees - arcAngleDegrees / 2;
+            float maxAngleDegrees = minAngleDegrees + arcAngleDegrees;
+            float angleDegrees = minAngleDegrees;
+            float angleStep = arcAngleDegrees / (float)bulletCount;
+
+            for (int i = 0; i < bulletCount; i++)
+            {
+                GameObject bullet = CreateBullet();
+                bullet.Transform.Position = Owner.Transform.Position;
+
+                float angleRadians = angleDegrees * MathF.PI / 180;
+                Vector2f unitVelocity = new Vector2f(
+                        MathF.Cos(angleRadians),
+                        MathF.Sin(angleRadians));
+                bullet.GetComponent<VelocityMovementComponent>().Velocity = unitVelocity * bulletSpeed;
+                bullet.Transform.Position += unitVelocity * GameSettings.EnemyBulletStartRadialOffset;
+
+                angleDegrees += angleStep;
+            }
+
+            yield return null;
+
+            IsPatternActive = false;
+        }
+
         private IEnumerator PulseRingEmitterCoroutine()
         {
             Dictionary<GameObject, Vector2f> bullets = new Dictionary<GameObject, Vector2f>();
@@ -253,8 +294,9 @@ namespace Bullets
             BoxColliderComponent colliderComponent = bullet.AddComponent<BoxColliderComponent>();
             colliderComponent.SetColliderRect(GameSettings.EnemyBulletColliderRect);
             colliderComponent.SetColliderRectOffset(GameSettings.EnemyBulletColliderRectOffset);
+            colliderComponent.LayerId = GameSettings.EnemyBulletCollisionLayer;
 
-            //DebugCollisionHandlerComponent collisionHandlerComponent = bullet.AddComponent<DebugCollisionHandlerComponent>();
+            DebugCollisionHandlerComponent collisionHandlerComponent = bullet.AddComponent<DebugCollisionHandlerComponent>();
 
             RangedDestroyComponent destroyComponent = bullet.AddComponent<RangedDestroyComponent>();
             destroyComponent.Target = Owner;
@@ -262,7 +304,5 @@ namespace Bullets
 
             return bullet;
         }
-
-
     }
 }

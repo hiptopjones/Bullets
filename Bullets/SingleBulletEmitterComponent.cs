@@ -11,7 +11,7 @@ using static SFML.Window.Keyboard;
 
 namespace Bullets
 {
-    internal class BulletEmitterComponent : Component
+    internal class SingleBulletEmitterComponent : Component
     {
         private GameObjectManager GameObjectManager { get; set; }
         private InputManager InputManager { get; set; }
@@ -49,8 +49,6 @@ namespace Bullets
 
         private GameObject SpawnBullet()
         {
-            // TODO: Check spawn rate
-
             const float bulletSpeed = 1000;
 
             GameObject bullet = CreateBullet();
@@ -81,8 +79,10 @@ namespace Bullets
             BoxColliderComponent colliderComponent = bullet.AddComponent<BoxColliderComponent>();
             colliderComponent.SetColliderRect(GameSettings.PlayerBulletColliderRect);
             colliderComponent.SetColliderRectOffset(GameSettings.PlayerBulletColliderRectOffset);
+            colliderComponent.LayerId = GameSettings.PlayerBulletCollisionLayer;
 
             //DebugCollisionHandlerComponent collisionHandlerComponent = bullet.AddComponent<DebugCollisionHandlerComponent>();
+            BulletCollisionHandlerComponent collisionHandlerComponent = bullet.AddComponent<BulletCollisionHandlerComponent>();
 
             RangedDestroyComponent destroyComponent = bullet.AddComponent<RangedDestroyComponent>();
             destroyComponent.Target = Owner;
