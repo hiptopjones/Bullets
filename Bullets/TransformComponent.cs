@@ -27,5 +27,10 @@ namespace Bullets
             scale.Y = 1;
             Scale = scale;
         }
+
+        public override string ToString()
+        {
+            return $"[TransformComponent] Position({Position}) Rotation({Rotation}) Scale({Scale})";
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using SFML.Graphics;
+﻿using NLog;
+using SFML.Graphics;
 using SFML.System;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,8 @@ namespace Bullets
 {
     internal class SpriteComponent : DrawableComponent
     {
+        private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
+
         public int TextureId { get; set; }
         public IntRect TextureRect { get; set; }
         public Vector2f Origin { get; set; }
@@ -50,6 +53,11 @@ namespace Bullets
         public override void Draw(GraphicsManager graphicsManager)
         {
             graphicsManager.Draw(Sprite);
+        }
+
+        public override string ToString()
+        {
+            return $"[SpriteComponent] TextureId({TextureId}) TextureRect({TextureRect}) Origin({Origin}) Sprite({Sprite})";
         }
     }
 }

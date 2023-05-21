@@ -57,10 +57,10 @@ namespace Bullets
 
             // Default is to actually destroy the object
             // Can be overwritten to allow pooling behavior
-            OnDestroyed = (g) => 
+            OnDestroyed = (g) =>
             {
                 g.IsEnabled = false;
-                g.IsAlive = false; 
+                g.IsAlive = false;
             };
         }
 
@@ -165,6 +165,12 @@ namespace Bullets
         public bool HasComponent<T>() where T : Component
         {
             return Components.OfType<T>().Any();
+        }
+
+        public override string ToString()
+        {
+            string components = string.Join("\n    ", Components.Select(x => $"{x.GetType().Name}({x})"));
+            return $"[GameObject] Id({Id}) Name({Name}) IsEnabled({IsEnabled}) IsAlive({IsAlive}) IsLocked({IsLocked}) Components(\n    {components})";
         }
     }
 }

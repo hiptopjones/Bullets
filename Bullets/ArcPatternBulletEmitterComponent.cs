@@ -1,4 +1,5 @@
-﻿using SFML.System;
+﻿using NLog;
+using SFML.System;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,12 +13,15 @@ namespace Bullets
 {
     internal class ArcPatternBulletEmitterComponent : Component
     {
+        private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
+
         public GameObject Target { get; set; }
 
         public float PatternInterval { get; set; }
 
-        private GameObjectPool BulletObjectPool { get; set; }
         private TimeManager TimeManager { get; set; }
+        private GameObjectPool BulletObjectPool { get; set; }
+        private CoroutineManager CoroutineManager { get; set; }
 
         private float NextPatternTime { get; set; }
 
@@ -34,6 +38,12 @@ namespace Bullets
             {
                 throw new Exception($"Unable to retrieve bullet object pool from service locator");
             }
+
+            CoroutineManager = ServiceLocator.Instance.GetService<CoroutineManager>();
+            if (CoroutineManager == null)
+            {
+                throw new Exception($"Unable to retrieve coroutine manager from service locator");
+            }
         }
 
         public override void Update(float deltaTime)
@@ -45,13 +55,15 @@ namespace Bullets
 
             if (TimeManager.TotalTime > NextPatternTime)
             {
-                SpawnBulletPattern();
+                CoroutineManager.StartCoroutine(SpawnBulletPattern());
                 NextPatternTime = TimeManager.TotalTime + PatternInterval;
             }
         }
 
-        private void SpawnBulletPattern()
+        private IEnumerator SpawnBulletPattern()
         {
+            Logger.Info("Spawning bullet pattern");
+
             const float arcAngleDegrees = 120;
 
             const float bulletSpeed = 500;
@@ -65,28 +77,43 @@ namespace Bullets
             float angleDegrees = minAngleDegrees;
             float angleStep = arcAngleDegrees / (float)bulletCount;
 
+            Queue<GameObject> bullets = new Queue<GameObject>();
+
             for (int i = 0; i < bulletCount; i++)
             {
                 GameObject bullet = CreateBullet();
                 bullet.Transform.Position = Owner.Transform.Position;
 
                 float angleRadians = angleDegrees * MathF.PI / 180;
-                Vector2f unitVelocity = new Vector2f(
+                Vector2f normalizedDirection = new Vector2f(
                         MathF.Cos(angleRadians),
                         MathF.Sin(angleRadians));
-                bullet.GetComponent<VelocityMovementComponent>().Velocity = unitVelocity * bulletSpeed;
-                bullet.Transform.Position += unitVelocity * GameSettings.EnemyBulletStartRadialOffset;
+                bullet.GetComponent<VelocityMovementComponent>().Velocity = normalizedDirection * bulletSpeed;
+                bullet.Transform.Position += normalizedDirection * GameSettings.EnemyBulletStartRadialOffset;
 
                 // Ensure the bullets always overlap in the expected order
                 bullet.GetComponent<SpriteComponent>().SortingOrder = i;
 
+                // Add to the queue to be enabled next frame
+                bullets.Enqueue(bullet);
+
                 angleDegrees += angleStep;
+            }
+
+            yield return new WaitForFrame();
+
+            // Ensure all bullets start on the same frame
+            while (bullets.Any())
+            {
+                GameObject bullet = bullets.Dequeue();
+                bullet.IsEnabled = true;
             }
         }
 
         private GameObject CreateBullet()
         {
             GameObject bullet = BulletObjectPool.GetOrCreateObject();
+            bullet.IsEnabled = false;
 
             SpriteComponent spriteComponent = bullet.GetComponent<SpriteComponent>();
             spriteComponent.TextureId = (int)GameSettings.TextureId.EnemyBullet;
