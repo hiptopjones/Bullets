@@ -93,6 +93,11 @@ namespace Bullets
 
             foreach (GameObject gameObject in addedGameObjects)
             {
+                gameObject.OnEnable();
+            }
+
+            foreach (GameObject gameObject in addedGameObjects)
+            {
                 gameObject.Start();
             }
 

@@ -18,7 +18,31 @@ namespace Bullets
         public string Name { get; set; }
         public TransformComponent Transform { get; private set; }
 
+        private bool _isEnabled = true;
+        public bool IsEnabled
+        {
+            get => _isEnabled;
+            set
+            {
+                if (_isEnabled != value)
+                {
+                    _isEnabled = value;
+                    if (_isEnabled)
+                    {
+                        OnEnable();
+                    }
+                    else
+                    {
+                        OnDisable();
+                    }
+                }
+            }
+        }
+
+        // Can only be set through Destroy()
         public bool IsAlive { get; private set; } = true;
+
+        public Action<GameObject> OnDestroyed;
 
         private List<Component> Components { get; } = new List<Component>();
 
@@ -28,6 +52,14 @@ namespace Bullets
             Name = $"Object{Id}";
 
             Transform = AddComponent<TransformComponent>();
+
+            // Default is to actually destroy the object
+            // Can be overwritten to allow pooling behavior
+            OnDestroyed = (g) => 
+            {
+                g.IsEnabled = false;
+                g.IsAlive = false; 
+            };
         }
 
         // Called exactly once when the object is initialized
@@ -36,6 +68,15 @@ namespace Bullets
             for (int i = Components.Count - 1; i >= 0; i--)
             {
                 Components[i].Awake();
+            }
+        }
+
+        // Called each time the object is enabled
+        public void OnEnable()
+        {
+            for (int i = Components.Count - 1; i >= 0; i--)
+            {
+                Components[i].OnEnable();
             }
         }
 
@@ -66,9 +107,29 @@ namespace Bullets
             }
         }
 
+        // Called each time the object is disabled
+        public void OnDisable()
+        {
+            for (int i = Components.Count - 1; i >= 0; i--)
+            {
+                Components[i].OnDisable();
+            }
+        }
+
+        // Intended to re-initialize any component state back to post Start() values
+        public void Reset()
+        {
+            for (int i = Components.Count - 1; i >= 0; i--)
+            {
+                Components[i].Reset();
+            }
+        }
+
+        // Takes this object out of service
         public void Destroy()
         {
-            IsAlive = false;
+            // Use redirection to enable object pooling
+            OnDestroyed(this);
         }
 
         public T AddComponent<T>() where T : Component, new()
@@ -98,6 +159,5 @@ namespace Bullets
         {
             return Components.OfType<T>().Any();
         }
-
     }
 }

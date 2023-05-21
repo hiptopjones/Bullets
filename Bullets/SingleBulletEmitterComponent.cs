@@ -13,17 +13,17 @@ namespace Bullets
 {
     internal class SingleBulletEmitterComponent : Component
     {
-        private GameObjectManager GameObjectManager { get; set; }
+        private GameObjectPool BulletObjectPool { get; set; }
         private InputManager InputManager { get; set; }
 
         private GameObject Player { get; set; }
 
         public override void Awake()
         {
-            GameObjectManager = ServiceLocator.Instance.GetService<GameObjectManager>();
-            if (GameObjectManager == null)
+            BulletObjectPool = ServiceLocator.Instance.GetService<GameObjectPool>("BulletObjectPool");
+            if (BulletObjectPool == null)
             {
-                throw new Exception($"Unable to retrieve game object manager from service locator");
+                throw new Exception($"Unable to retrieve bullet object pool from service locator");
             }
 
             InputManager = ServiceLocator.Instance.GetService<InputManager>();
@@ -67,26 +67,24 @@ namespace Bullets
 
         private GameObject CreateBullet()
         {
-            GameObject bullet = GameObjectManager.CreateGameObject(GameSettings.PlayerBulletObjectName);
+            GameObject bullet = BulletObjectPool.GetOrCreateObject();
 
-            SpriteComponent spriteComponent = bullet.AddComponent<SpriteComponent>();
+            SpriteComponent spriteComponent = bullet.GetComponent<SpriteComponent>();
             spriteComponent.TextureId = (int)GameSettings.TextureId.PlayerBullet;
             spriteComponent.Origin = new Vector2f(GameSettings.PlayerBulletTextureWidth / 2, GameSettings.PlayerBulletTextureHeight / 2);
             spriteComponent.RotationOffset = 90;
 
-            VelocityMovementComponent movementComponent = bullet.AddComponent<VelocityMovementComponent>();
-
-            BoxColliderComponent colliderComponent = bullet.AddComponent<BoxColliderComponent>();
+            BoxColliderComponent colliderComponent = bullet.GetComponent<BoxColliderComponent>();
             colliderComponent.SetColliderRect(GameSettings.PlayerBulletColliderRect);
             colliderComponent.SetColliderRectOffset(GameSettings.PlayerBulletColliderRectOffset);
             colliderComponent.LayerId = GameSettings.PlayerBulletCollisionLayer;
 
-            //DebugCollisionHandlerComponent collisionHandlerComponent = bullet.AddComponent<DebugCollisionHandlerComponent>();
-            BulletCollisionHandlerComponent collisionHandlerComponent = bullet.AddComponent<BulletCollisionHandlerComponent>();
+            RangedDestroyComponent rangedDestroyComponent = bullet.GetComponent<RangedDestroyComponent>();
+            rangedDestroyComponent.Target = Owner;
+            rangedDestroyComponent.MaxDistance = GameSettings.PlayerBulletMaxDistance;
 
-            RangedDestroyComponent destroyComponent = bullet.AddComponent<RangedDestroyComponent>();
-            destroyComponent.Target = Owner;
-            destroyComponent.MaxDistance = GameSettings.PlayerBulletMaxDistance;
+            TimedDestroyComponent timedDestroyComponent = bullet.GetComponent<TimedDestroyComponent>();
+            timedDestroyComponent.TimeToLive = 3;
 
             return bullet;
         }

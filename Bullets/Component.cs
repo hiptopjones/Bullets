@@ -11,8 +11,12 @@ namespace Bullets
         public GameObject Owner { get; set; }
 
         public virtual void Awake() { }
+        public virtual void OnEnable() { }
         public virtual void Start() { }
         public virtual void Update(float deltaTime) { }
         public virtual void LateUpdate(float deltaTime) { }
+        public virtual void OnDisable() { }
+
+        public virtual void Reset() { }
     }
 }

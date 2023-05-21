@@ -69,11 +69,21 @@ namespace Bullets
 
             foreach (ColliderComponent colliderComponent in ColliderComponents)
             {
+                if (!colliderComponent.Owner.IsEnabled)
+                {
+                    continue;
+                }
+
                 List<QuadtreeEntry<ColliderComponent>> candidateEntries = CollisionTree.Search(colliderComponent.GetBoundingBox());
 
                 foreach (QuadtreeEntry< ColliderComponent> quadtreeEntry in candidateEntries)
                 {
                     ColliderComponent otherColliderComponent = quadtreeEntry.Context;
+
+                    if (!otherColliderComponent.Owner.IsEnabled)
+                    {
+                        continue;
+                    }
 
                     if (!AreLayersCollidable(colliderComponent.LayerId, otherColliderComponent.LayerId))
                     {

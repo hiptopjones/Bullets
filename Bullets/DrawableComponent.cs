@@ -8,6 +8,9 @@ namespace Bullets
 {
     internal abstract class DrawableComponent : Component
     {
+        // Lower numbers are drawn first
+        public int SortingOrder { get; set; }
+
         public abstract void Draw(GraphicsManager graphicsManager);
     }
 }

@@ -45,6 +45,9 @@ namespace Bullets
             Utilities.MakeKey((int)CollisionLayer.Player, (int)CollisionLayer.EnemyBullet),
         };
 
+        // Bullets
+        public const string BulletObjectName = "Bullet";
+
         // Player
         public const string PlayerObjectName = "Player";
         public const string PlayerTextureFileName = "Player.png";

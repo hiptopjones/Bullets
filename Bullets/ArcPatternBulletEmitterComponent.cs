@@ -16,7 +16,7 @@ namespace Bullets
 
         public float PatternInterval { get; set; }
 
-        private GameObjectManager GameObjectManager { get; set; }
+        private GameObjectPool BulletObjectPool { get; set; }
         private TimeManager TimeManager { get; set; }
 
         private float NextPatternTime { get; set; }
@@ -29,10 +29,10 @@ namespace Bullets
                 throw new Exception($"Unable to retrieve time manager from service locator");
             }
 
-            GameObjectManager = ServiceLocator.Instance.GetService<GameObjectManager>();
-            if (GameObjectManager == null)
+            BulletObjectPool = ServiceLocator.Instance.GetService<GameObjectPool>("BulletObjectPool");
+            if (BulletObjectPool == null)
             {
-                throw new Exception($"Unable to retrieve game object manager from service locator");
+                throw new Exception($"Unable to retrieve bullet object pool from service locator");
             }
         }
 
@@ -77,35 +77,34 @@ namespace Bullets
                 bullet.GetComponent<VelocityMovementComponent>().Velocity = unitVelocity * bulletSpeed;
                 bullet.Transform.Position += unitVelocity * GameSettings.EnemyBulletStartRadialOffset;
 
+                // Ensure the bullets always overlap in the expected order
+                bullet.GetComponent<SpriteComponent>().SortingOrder = i;
+
                 angleDegrees += angleStep;
             }
         }
 
         private GameObject CreateBullet()
         {
-            GameObject bullet = GameObjectManager.CreateGameObject(GameSettings.EnemyBulletObjectName);
+            GameObject bullet = BulletObjectPool.GetOrCreateObject();
 
-            SpriteComponent spriteComponent = bullet.AddComponent<SpriteComponent>();
+            SpriteComponent spriteComponent = bullet.GetComponent<SpriteComponent>();
             spriteComponent.TextureId = (int)GameSettings.TextureId.EnemyBullet;
             spriteComponent.Origin = new Vector2f(GameSettings.EnemyBulletTextureWidth / 2, GameSettings.EnemyBulletTextureHeight / 2);
 
-            VelocityMovementComponent movementComponent = bullet.AddComponent<VelocityMovementComponent>();
-
-            BoxColliderComponent colliderComponent = bullet.AddComponent<BoxColliderComponent>();
+            BoxColliderComponent colliderComponent = bullet.GetComponent<BoxColliderComponent>();
             colliderComponent.SetColliderRect(GameSettings.EnemyBulletColliderRect);
             colliderComponent.SetColliderRectOffset(GameSettings.EnemyBulletColliderRectOffset);
             colliderComponent.LayerId = GameSettings.EnemyBulletCollisionLayer;
 
-            //DebugCollisionHandlerComponent collisionHandlerComponent = bullet.AddComponent<DebugCollisionHandlerComponent>();
-            BulletCollisionHandlerComponent collisionHandlerComponent = bullet.AddComponent<BulletCollisionHandlerComponent>();
+            RangedDestroyComponent rangedDestroyComponent = bullet.GetComponent<RangedDestroyComponent>();
+            rangedDestroyComponent.Target = Owner;
+            rangedDestroyComponent.MaxDistance = GameSettings.EnemyBulletMaxDistance;
 
-            RangedDestroyComponent destroyComponent = bullet.AddComponent<RangedDestroyComponent>();
-            destroyComponent.Target = Owner;
-            destroyComponent.MaxDistance = GameSettings.EnemyBulletMaxDistance;
+            TimedDestroyComponent timedDestroyComponent = bullet.GetComponent<TimedDestroyComponent>();
+            timedDestroyComponent.TimeToLive = 3;
 
             return bullet;
         }
-
-
     }
 }

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using NLog;
+using SFML.System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +10,8 @@ namespace Bullets
 {
     internal class DrawableSystem
     {
+        private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
+
         private List<DrawableComponent> DrawableComponents { get; } = new List<DrawableComponent>();
 
         public void ProcessAdditions(IEnumerable<GameObject> newGameObjects)
@@ -25,10 +29,12 @@ namespace Bullets
 
         public void Draw(GraphicsManager graphicsManager)
         {
-            // TODO: Manage sort order and/or layer
-            foreach (DrawableComponent drawableComponent in DrawableComponents)
+            foreach (DrawableComponent drawableComponent in DrawableComponents.OrderBy(x => x.SortingOrder))
             {
-                drawableComponent.Draw(graphicsManager);
+                if (drawableComponent.Owner.IsEnabled)
+                {
+                    drawableComponent.Draw(graphicsManager);
+                }
             }
         }
     }

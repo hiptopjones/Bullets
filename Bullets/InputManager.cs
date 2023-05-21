@@ -35,6 +35,12 @@ namespace Bullets
             MouseButtonDown.Clear();
         }
 
+        public void OnWindowLostFocus(object sender, EventArgs e)
+        {
+            KeyPressed.Clear();
+            MouseButtonPressed.Clear();
+        }
+
         public bool IsKeyPressed(Keyboard.Key keycode)
         {
             return KeyPressed.Contains(keycode);

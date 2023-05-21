@@ -25,7 +25,10 @@ namespace Bullets
         {
             foreach (GameObject gameObject in GameObjects)
             {
-                gameObject.Update(deltaTime);
+                if (gameObject.IsEnabled)
+                {
+                    gameObject.Update(deltaTime);
+                }
             }
         }
 
@@ -33,7 +36,10 @@ namespace Bullets
         {
             foreach (GameObject gameObject in GameObjects)
             {
-                gameObject.LateUpdate(deltaTime);
+                if (gameObject.IsEnabled)
+                {
+                    gameObject.LateUpdate(deltaTime);
+                }
             }
         }
     }

@@ -15,12 +15,20 @@ namespace Bullets
         public IntRect TextureRect { get; set; }
         public Vector2f Origin { get; set; }
         public float RotationOffset { get; set; }
+        public bool IsHorizontalFlipEnabled { get; set; }
 
         private Sprite Sprite { get; set; } = new Sprite();
 
         private ResourceManager ResourceManager { get; set; }
 
-        public bool IsHorizontalFlipEnabled { get; set; }
+        public override void Reset()
+        {
+            TextureId = 0;
+            TextureRect = new IntRect();
+            Origin = new Vector2f();
+            RotationOffset = 0;
+            IsHorizontalFlipEnabled = false;
+        }
 
         public override void Awake()
         {
@@ -31,19 +39,16 @@ namespace Bullets
             }
         }
 
-        public override void Start()
-        {
-            RefreshTexture();
-        }
-
         public override void LateUpdate(float deltaTime)
         {
+            Sprite.Texture = ResourceManager.GetTexture(TextureId);
+            Sprite.TextureRect = new IntRect(0, 0, (int)Sprite.Texture.Size.X, (int)Sprite.Texture.Size.Y);
+
             Sprite.Origin = Origin;
 
             Sprite.Position = Owner.Transform.Position;
             Sprite.Rotation = Owner.Transform.Rotation + RotationOffset;
             Sprite.Scale = Owner.Transform.Scale;
-
         }
 
         public override void Draw(GraphicsManager graphicsManager)
@@ -63,19 +68,6 @@ namespace Bullets
 
             // Undo any adjustments
             Sprite.TextureRect = savedTextureRect;
-        }
-
-        // Necessary for animations, where different states could reference different textures
-        public void RefreshTexture()
-        {
-            Sprite.Texture = ResourceManager.GetTexture(TextureId);
-
-            // Check if our texture rect was actually set to something valid before
-            // overwriting the default one the sprite uses
-            if (TextureRect.Width > 0)
-            {
-                Sprite.TextureRect = TextureRect;
-            }
         }
     }
 }

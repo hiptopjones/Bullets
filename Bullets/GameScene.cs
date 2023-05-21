@@ -1,4 +1,5 @@
-﻿using SFML.System;
+﻿using NLog;
+using SFML.System;
 using System.Numerics;
 
 namespace Bullets
@@ -13,6 +14,7 @@ namespace Bullets
     internal class GameScene : Scene
     {
         protected GameObjectManager GameObjectManager { get; set; }
+        protected GameObjectPool BulletObjectPool { get; set; }
 
         private Queue<GameObject> Bullets { get; set; } = new Queue<GameObject>();
 
@@ -21,10 +23,31 @@ namespace Bullets
             GameObjectManager = new GameObjectManager();
             ServiceLocator.Instance.ProvideService(GameObjectManager);
 
+            BulletObjectPool = new GameObjectPool(CreateBullet);
+            ServiceLocator.Instance.ProvideService("BulletObjectPool", BulletObjectPool);
+
             GameObject player = CreatePlayer();
             ServiceLocator.Instance.ProvideService("Player", player);
 
             GameObject enemy = CreateEnemy();
+        }
+
+        private GameObject CreateBullet()
+        {
+            GameObject bullet = GameObjectManager.CreateGameObject(GameSettings.BulletObjectName);
+
+            // Add standard (empty) components
+            SpriteComponent spriteComponent = bullet.AddComponent<SpriteComponent>();
+            VelocityMovementComponent movementComponent = bullet.AddComponent<VelocityMovementComponent>();
+            BoxColliderComponent colliderComponent = bullet.AddComponent<BoxColliderComponent>();
+            //DebugCollisionHandlerComponent collisionHandlerComponent = bullet.AddComponent<DebugCollisionHandlerComponent>();
+            BulletCollisionHandlerComponent collisionHandlerComponent = bullet.AddComponent<BulletCollisionHandlerComponent>();
+            RangedDestroyComponent rangedDestroyComponent = bullet.AddComponent<RangedDestroyComponent>();
+            TimedDestroyComponent timedDestroyComponent = bullet.AddComponent<TimedDestroyComponent>();
+
+            bullet.OnDestroyed = BulletObjectPool.OnDestroyed;
+
+            return bullet;
         }
 
         private GameObject CreatePlayer()

@@ -16,6 +16,8 @@ namespace Bullets
         public event EventHandler<MouseButtonEventArgs> MouseButtonPressed;
         public event EventHandler<MouseButtonEventArgs> MouseButtonReleased;
 
+        public event EventHandler WindowLostFocus;
+
         public bool IsOpen => RenderWindow.IsOpen;
 
         public string Name { get; set; }
@@ -36,6 +38,7 @@ namespace Bullets
             RenderWindow.SetVerticalSyncEnabled(true);
 
             RenderWindow.Closed += OnClosed;
+            RenderWindow.LostFocus += OnLostFocus;
             RenderWindow.KeyPressed += OnKeyPressed;
             RenderWindow.KeyReleased += OnKeyReleased;
             RenderWindow.MouseMoved += OnMouseMoved;
@@ -74,6 +77,11 @@ namespace Bullets
         private void OnClosed(object sender, EventArgs e)
         {
             RenderWindow.Close();
+        }
+
+        private void OnLostFocus(object sender, EventArgs e)
+        {
+            WindowLostFocus?.Invoke(sender, e);
         }
 
         private void OnKeyPressed(object sender, KeyEventArgs e)

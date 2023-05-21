@@ -102,8 +102,6 @@ namespace Bullets
 
             SpriteComponent.TextureId = frame.TextureId;
             SpriteComponent.TextureRect = frame.TextureRect;
-
-            SpriteComponent.RefreshTexture();
         }
     }
 }

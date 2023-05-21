@@ -41,6 +41,7 @@ namespace Bullets
             ServiceLocator.Instance.ProvideService(SceneManager);
 
             GraphicsManager = new GraphicsManager(GameSettings.GameName, GameSettings.WindowWidth, GameSettings.WindowHeight);
+            GraphicsManager.WindowLostFocus += InputManager.OnWindowLostFocus;
             GraphicsManager.KeyPressed += InputManager.OnKeyPressed;
             GraphicsManager.KeyReleased += InputManager.OnKeyReleased;
             GraphicsManager.MouseMoved += InputManager.OnMouseMoved;
