@@ -28,12 +28,22 @@ namespace Bullets
         public const string SplashScreenTextureFileName = "Splash.png";
         public const float SplashScreenTransitionDelaySeconds = 2;
 
+        // Collisions
         public enum CollisionLayer
         {
             None,
             Player,
             Enemy,
+            PlayerBullet,
+            EnemyBullet,
         }
+
+        public static readonly HashSet<string> Collidables = new HashSet<string>
+        {
+            Utilities.MakeKey((int)CollisionLayer.Player, (int)CollisionLayer.Enemy),
+            Utilities.MakeKey((int)CollisionLayer.PlayerBullet, (int)CollisionLayer.Enemy),
+            Utilities.MakeKey((int)CollisionLayer.Player, (int)CollisionLayer.EnemyBullet),
+        };
 
         // Player
         public const string PlayerObjectName = "Player";
@@ -55,19 +65,7 @@ namespace Bullets
         public static readonly FloatRect PlayerBulletColliderRect = new FloatRect(0, 0, PlayerBulletTextureWidth, PlayerBulletTextureHeight);
         public static readonly Vector2f PlayerBulletColliderRectOffset = new Vector2f(0, 0);
         public const float PlayerBulletMaxDistance = 1000;
-        public const int PlayerBulletCollisionLayer = (int)CollisionLayer.Player;
-
-        // Enemy Bullet Pattern
-        public const string EnemyBulletObjectName = "Enemy Bullet";
-        public const string EnemyBulletTextureFileName = "MediumRedBullet.png";
-        public const int EnemyBulletMaxCount = 100;
-        public const float EnemyBulletTextureWidth = 40;
-        public const float EnemyBulletTextureHeight = 40;
-        public static readonly FloatRect EnemyBulletColliderRect = new FloatRect(0, 0, EnemyBulletTextureWidth, EnemyBulletTextureHeight);
-        public static readonly Vector2f EnemyBulletColliderRectOffset = new Vector2f(0, 0);
-        public const float EnemyBulletMaxDistance = 1000;
-        public const float EnemyBulletStartRadialOffset = 75;
-        public const int EnemyBulletCollisionLayer = (int)CollisionLayer.Enemy;
+        public const int PlayerBulletCollisionLayer = (int)CollisionLayer.PlayerBullet;
 
         // Enemy Turret
         public const string EnemyTurretObjectName = "Enemy Turret";
@@ -79,6 +77,18 @@ namespace Bullets
         public static readonly Vector2f EnemyTurretColliderRectOffset = new Vector2f(0, 0);
         public const float EnemyTurretMovementSpeed = 250;
         public const int EnemyTurretCollisionLayer = (int)CollisionLayer.Enemy;
+
+        // Enemy Bullet Pattern
+        public const string EnemyBulletObjectName = "Enemy Bullet";
+        public const string EnemyBulletTextureFileName = "MediumRedBullet.png";
+        public const int EnemyBulletMaxCount = 100;
+        public const float EnemyBulletTextureWidth = 40;
+        public const float EnemyBulletTextureHeight = 40;
+        public static readonly FloatRect EnemyBulletColliderRect = new FloatRect(0, 0, EnemyBulletTextureWidth, EnemyBulletTextureHeight);
+        public static readonly Vector2f EnemyBulletColliderRectOffset = new Vector2f(0, 0);
+        public const float EnemyBulletMaxDistance = 1000;
+        public const float EnemyBulletStartRadialOffset = 75;
+        public const int EnemyBulletCollisionLayer = (int)CollisionLayer.EnemyBullet;
 
         // Resources
         public const string ResourcesDirectoryName = "Assets";
@@ -113,11 +123,6 @@ namespace Bullets
         public static readonly Dictionary<int, string> Fonts = new Dictionary<int, string>
         {
             { (int)FontId.Debug, DebugFontFileName },
-        };
-
-        public static readonly HashSet<string> Collidables = new HashSet<string>
-        {
-            Utilities.MakeKey((int)CollisionLayer.Player, (int)CollisionLayer.Enemy)
         };
     }
 }

@@ -68,9 +68,9 @@ namespace Bullets
 
             GameObject player = ServiceLocator.Instance.GetService<GameObject>("Player");
 
-            EnemyMovementComponent movementComponent = enemy.AddComponent<EnemyMovementComponent>();
-            movementComponent.Speed = GameSettings.EnemyTurretMovementSpeed;
-            movementComponent.Target = player;
+            //EnemyMovementComponent movementComponent = enemy.AddComponent<EnemyMovementComponent>();
+            //movementComponent.Speed = GameSettings.EnemyTurretMovementSpeed;
+            //movementComponent.Target = player;
 
             BoxColliderComponent colliderComponent = enemy.AddComponent<BoxColliderComponent>();
             colliderComponent.SetColliderRect(GameSettings.EnemyTurretColliderRect);
