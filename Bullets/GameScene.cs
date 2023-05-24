@@ -1,4 +1,5 @@
 ﻿using NLog;
+using SFML.Graphics;
 using SFML.System;
 using System.Numerics;
 
@@ -13,6 +14,8 @@ namespace Bullets
 
     internal class GameScene : Scene
     {
+        private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
+
         protected GameObjectManager GameObjectManager { get; set; }
         protected GameObjectPool BulletObjectPool { get; set; }
 
@@ -44,6 +47,7 @@ namespace Bullets
             BulletCollisionHandlerComponent collisionHandlerComponent = bullet.AddComponent<BulletCollisionHandlerComponent>();
             RangedDestroyComponent rangedDestroyComponent = bullet.AddComponent<RangedDestroyComponent>();
             TimedDestroyComponent timedDestroyComponent = bullet.AddComponent<TimedDestroyComponent>();
+            DamageComponent damageComponent = bullet.AddComponent<DamageComponent>();
 
             bullet.OnDestroyed = BulletObjectPool.OnDestroyed;
 
@@ -75,6 +79,17 @@ namespace Bullets
             SingleBulletEmitterComponent bulletEmitterComponent = player.AddComponent<SingleBulletEmitterComponent>();
 
             //DebugCollisionHandlerComponent collisionHandlerComponent = player.AddComponent<DebugCollisionHandlerComponent>();
+            DamageCollisionHandlerComponent collisionHandlerComponent = player.AddComponent<DamageCollisionHandlerComponent>();
+
+            HealthBarComponent healthBarComponent = player.AddComponent<HealthBarComponent>();
+            healthBarComponent.ForegroundTextureId = (int)GameSettings.TextureId.HealthBarForeground;
+            healthBarComponent.BackgroundTextureId = (int)GameSettings.TextureId.HealthBarBackground;
+            healthBarComponent.Offset = new Vector2f(0, -100);
+            healthBarComponent.Size = new Vector2f(100, 10);
+
+            HealthComponent healthComponent = player.AddComponent<HealthComponent>();
+            healthComponent.MaxHealth = 50;
+            healthComponent.HealthChanged += healthBarComponent.OnHealthChanged;
 
             return player;
         }
@@ -104,6 +119,37 @@ namespace Bullets
             bulletEmitterComponent.PatternInterval = 3;
 
             //DebugCollisionHandlerComponent collisionHandlerComponent = enemy.AddComponent<DebugCollisionHandlerComponent>();
+            DamageCollisionHandlerComponent collisionHandlerComponent = enemy.AddComponent<DamageCollisionHandlerComponent>();
+
+            HealthBarComponent healthBarComponent = enemy.AddComponent<HealthBarComponent>();
+            healthBarComponent.ForegroundTextureId = (int)GameSettings.TextureId.HealthBarForeground;
+            healthBarComponent.BackgroundTextureId = (int)GameSettings.TextureId.HealthBarBackground;
+            healthBarComponent.Offset = new Vector2f(0, -100);
+            healthBarComponent.Size = new Vector2f(100, 10);
+
+            DamageNumbersComponent damageNumbersComponent = enemy.AddComponent<DamageNumbersComponent>();
+            damageNumbersComponent.FontId = (int)GameSettings.FontId.DamageNumbers;
+            damageNumbersComponent.FillColor = Color.Green;
+            damageNumbersComponent.FontSize = GameSettings.DamageNumbersTextSize;
+            damageNumbersComponent.PositionOffset = new Vector2f(0, -80);
+            damageNumbersComponent.RandomOffsetRange = new Vector2f(50, 0);
+            damageNumbersComponent.EffectVelocity = new Vector2f(0, -100);
+            damageNumbersComponent.EffectDuration = 0.5f;
+
+            ParticlesComponent particlesComponent = enemy.AddComponent<ParticlesComponent>();
+            particlesComponent.CircleRadius = 3;
+            particlesComponent.PointCount = 5;
+            particlesComponent.FillColor = Color.Magenta;
+            particlesComponent.PositionOffset = new Vector2f(0, 0);
+            particlesComponent.RandomOffsetRange = new Vector2f(50,  50);
+            particlesComponent.EffectSpeed = 250;
+            particlesComponent.EffectDuration = 1f;
+
+            HealthComponent healthComponent = enemy.AddComponent<HealthComponent>();
+            healthComponent.MaxHealth = 500;
+            healthComponent.HealthChanged += healthBarComponent.OnHealthChanged;
+            healthComponent.HealthChanged += damageNumbersComponent.OnHealthChanged;
+            healthComponent.HealthChanged += particlesComponent.OnHealthChanged;
 
             return enemy;
         }

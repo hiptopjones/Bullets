@@ -45,6 +45,16 @@ namespace Bullets
             Utilities.MakeKey((int)CollisionLayer.Player, (int)CollisionLayer.EnemyBullet),
         };
 
+        // Health Bar
+        public const string HealthBarBackgroundTextureFileName = "HealthBarBlack.png";
+        public const string HealthBarForegroundTextureFileName = "HealthBarRed.png";
+        public const int HealthBarMaxWidth = 100;
+
+        // Damage Numbers
+        public static readonly Color DamageNumbersColor = Color.Black;
+        public const string DamageNumbersFontFileName = "Super Bubble.ttf";
+        public const uint DamageNumbersTextSize = 20;
+
         // Bullets
         public const string BulletObjectName = "Bullet";
 
@@ -106,7 +116,9 @@ namespace Bullets
             Player,
             PlayerBullet,
             EnemyBullet,
-            EnemyTurret
+            EnemyTurret,
+            HealthBarBackground,
+            HealthBarForeground,
         }
 
         public static readonly Dictionary<int, string> Textures = new Dictionary<int, string>
@@ -116,17 +128,21 @@ namespace Bullets
             { (int)TextureId.EnemyBullet, EnemyBulletTextureFileName },
             { (int)TextureId.PlayerBullet, PlayerBulletTextureFileName },
             { (int)TextureId.EnemyTurret, EnemyTurretTextureFileName },
+            { (int)TextureId.HealthBarBackground, HealthBarBackgroundTextureFileName },
+            { (int)TextureId.HealthBarForeground, HealthBarForegroundTextureFileName },
         };
 
         // Fonts
         public enum FontId
         {
-            Debug
+            Debug,
+            DamageNumbers,
         }
 
         public static readonly Dictionary<int, string> Fonts = new Dictionary<int, string>
         {
             { (int)FontId.Debug, DebugFontFileName },
+            { (int)FontId.DamageNumbers, DamageNumbersFontFileName },
         };
     }
 }

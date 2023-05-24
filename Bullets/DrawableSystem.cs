@@ -17,7 +17,7 @@ namespace Bullets
         public void ProcessAdditions(IEnumerable<GameObject> newGameObjects)
         {
             DrawableComponents.AddRange(newGameObjects
-                .Select(x => x.GetComponent<DrawableComponent>())
+                .SelectMany(x => x.GetComponents<DrawableComponent>())
                 .Where(x => x != null));
         }
 

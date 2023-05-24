@@ -8,7 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Assets\Fonts\Super Bubble.ttf" />
     <None Remove="Assets\Textures\Bullet.png" />
+    <None Remove="Assets\Textures\HealthBarBlack.png" />
+    <None Remove="Assets\Textures\HealthBarRed.png" />
     <None Remove="Assets\Textures\MediumRedBullet.png" />
     <None Remove="Assets\Textures\Orb.png" />
     <None Remove="Assets\Textures\Player.png" />
@@ -21,6 +24,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="Assets\Fonts\Super Bubble.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Textures\HealthBarBlack.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Textures\HealthBarRed.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Assets\Textures\MediumRedBullet.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

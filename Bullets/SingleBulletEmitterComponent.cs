@@ -90,6 +90,9 @@ namespace Bullets
             TimedDestroyComponent timedDestroyComponent = bullet.GetComponent<TimedDestroyComponent>();
             timedDestroyComponent.TimeToLive = 3;
 
+            DamageComponent damageComponent = bullet.GetComponent<DamageComponent>();
+            damageComponent.Damage = 10;
+
             return bullet;
         }
     }

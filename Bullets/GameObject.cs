@@ -157,9 +157,14 @@ namespace Bullets
             return component;
         }
 
+        public IEnumerable<T> GetComponents<T>() where T : Component
+        {
+            return Components.OfType<T>();
+        }
+
         public T GetComponent<T>() where T : Component
         {
-            return Components.OfType<T>().SingleOrDefault();
+            return GetComponents<T>().FirstOrDefault();
         }
 
         public bool HasComponent<T>() where T : Component

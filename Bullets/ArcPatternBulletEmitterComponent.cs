@@ -62,7 +62,7 @@ namespace Bullets
 
         private IEnumerator SpawnBulletPattern()
         {
-            Logger.Info("Spawning bullet pattern");
+            // TODO: Telegraph intent!
 
             const float arcAngleDegrees = 120;
 
@@ -130,6 +130,9 @@ namespace Bullets
 
             TimedDestroyComponent timedDestroyComponent = bullet.GetComponent<TimedDestroyComponent>();
             timedDestroyComponent.TimeToLive = 3;
+
+            DamageComponent damageComponent = bullet.GetComponent<DamageComponent>();
+            damageComponent.Damage = 2;
 
             return bullet;
         }
