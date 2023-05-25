@@ -62,7 +62,10 @@ namespace Bullets
         public const string PlayerObjectName = "Player";
         public const string PlayerTextureFileName = "Player.png";
         public static readonly Vector2f PlayerStartPosition = new Vector2f(200, 200);
-        public const float PlayerMovementSpeed = 500;
+        public const float PlayerNormalMovementSpeed = 500;
+        public const float PlayerDashMovementSpeed = 1000;
+        public const float PlayerDashMovementTime = 0.25f;
+        public const float PlayerDashCooldownTime = 0.5f;
         public const float PlayerRotationSpeed = 360;
         public const float PlayerTextureWidth = 99;
         public const float PlayerTextureHeight = 100;

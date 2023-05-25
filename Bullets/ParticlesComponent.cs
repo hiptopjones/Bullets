@@ -72,8 +72,6 @@ namespace Bullets
                 particleEffect.Shape.Position += particleEffect.Velocity * deltaTime;
                 particleEffect.RemainingTime -= deltaTime;
             }
-
-            Debug.DrawText($"StartIndex({StartIndex}) NextIndex({NextIndex})", new Vector2f(0, 0));
         }
 
         public override void Draw(GraphicsManager graphicsManager)

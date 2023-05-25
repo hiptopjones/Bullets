@@ -24,6 +24,8 @@ namespace Bullets
         public int FontId { get; set; }
         public uint FontSize { get; set; }
         public Color FillColor { get; set; }
+        public Color OutlineColor { get; set; }
+        public float OutlineThickness { get; set; }
         public Vector2f PositionOffset { get; set; }
         public Vector2f RandomOffsetRange { get; set; }
         public Vector2f EffectVelocity { get; set; }
@@ -53,6 +55,8 @@ namespace Bullets
                 damageNumberEffect.DamageText.Font = ResourceManager.GetFont(FontId);
                 damageNumberEffect.DamageText.CharacterSize = FontSize;
                 damageNumberEffect.DamageText.FillColor = FillColor;
+                damageNumberEffect.DamageText.OutlineColor = OutlineColor;
+                damageNumberEffect.DamageText.OutlineThickness = OutlineThickness;
 
                 EffectsRingBuffer.Add(damageNumberEffect);
             }

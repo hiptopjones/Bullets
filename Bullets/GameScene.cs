@@ -64,7 +64,10 @@ namespace Bullets
             spriteComponent.Origin = new Vector2f(GameSettings.PlayerTextureWidth / 2, GameSettings.PlayerTextureHeight / 2);
 
             KeyboardMovementComponent movementComponent = player.AddComponent<KeyboardMovementComponent>();
-            movementComponent.Speed = GameSettings.PlayerMovementSpeed;
+            movementComponent.NormalSpeed = GameSettings.PlayerNormalMovementSpeed;
+            movementComponent.DashSpeed = GameSettings.PlayerDashMovementSpeed;
+            movementComponent.DashMovementTime = GameSettings.PlayerDashMovementTime;
+            movementComponent.DashCooldownTime = GameSettings.PlayerDashCooldownTime;
 
             //KeyboardLookComponent lookComponent = player.AddComponent<KeyboardLookComponent>();
             //lookComponent.LookSpeed = GameSettings.PlayerRotationSpeed;
@@ -130,6 +133,8 @@ namespace Bullets
             DamageNumbersComponent damageNumbersComponent = enemy.AddComponent<DamageNumbersComponent>();
             damageNumbersComponent.FontId = (int)GameSettings.FontId.DamageNumbers;
             damageNumbersComponent.FillColor = Color.Green;
+            damageNumbersComponent.OutlineColor = Color.White;
+            damageNumbersComponent.OutlineThickness = 3;
             damageNumbersComponent.FontSize = GameSettings.DamageNumbersTextSize;
             damageNumbersComponent.PositionOffset = new Vector2f(0, -80);
             damageNumbersComponent.RandomOffsetRange = new Vector2f(50, 0);
@@ -139,11 +144,11 @@ namespace Bullets
             ParticlesComponent particlesComponent = enemy.AddComponent<ParticlesComponent>();
             particlesComponent.CircleRadius = 3;
             particlesComponent.PointCount = 5;
-            particlesComponent.FillColor = Color.Magenta;
+            particlesComponent.FillColor = Color.White;
             particlesComponent.PositionOffset = new Vector2f(0, 0);
             particlesComponent.RandomOffsetRange = new Vector2f(50,  50);
-            particlesComponent.EffectSpeed = 250;
-            particlesComponent.EffectDuration = 1f;
+            particlesComponent.EffectSpeed = 500;
+            particlesComponent.EffectDuration = 0.25f;
 
             HealthComponent healthComponent = enemy.AddComponent<HealthComponent>();
             healthComponent.MaxHealth = 500;
