@@ -11,7 +11,7 @@ using static SFML.Window.Keyboard;
 
 namespace Bullets
 {
-    internal class ArcPatternBulletEmitterComponent : Component
+    internal class SweepRayBulletEmitterComponent : Component
     {
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
 
@@ -22,6 +22,8 @@ namespace Bullets
         private TimeManager TimeManager { get; set; }
         private GameObjectPool BulletObjectPool { get; set; }
         private CoroutineManager CoroutineManager { get; set; }
+
+        private Random Random { get; set; } = new Random();
 
         private float NextPatternTime { get; set; }
 
@@ -62,54 +64,70 @@ namespace Bullets
 
         private IEnumerator SpawnBulletPattern()
         {
+            const int bulletCount = 10;
+            float linearBulletSpeed = 300;
+            float angularBulletSpeed = 360;
+            angularBulletSpeed *= MathF.Sign(Random.NextSingle() - 0.5f);
+
             TelegraphIntent();
 
-            yield return new WaitForTime(TimeSpan.FromSeconds(0.2));
+            yield return new WaitForTime(TimeSpan.FromSeconds(0.2f));
 
-            const float arcAngleDegrees = 120;
 
-            const float bulletSpeed = 500;
-            const int bulletCount = 20;
-
-            // Angle the arc at the target
+            // Angle the pattern at the target
             Vector2f direction = Target.Transform.Position - Owner.Transform.Position;
-
             float targetAngleDegrees = MathF.Atan2(direction.Y, direction.X) * 180 / MathF.PI;
-            float minAngleDegrees = targetAngleDegrees - arcAngleDegrees / 2;
-            float angleDegrees = minAngleDegrees;
-            float angleStep = arcAngleDegrees / (float)bulletCount;
 
-            Queue<GameObject> bullets = new Queue<GameObject>();
+            List<GameObject> bullets = new List<GameObject>();
 
             for (int i = 0; i < bulletCount; i++)
             {
                 GameObject bullet = CreateBullet();
                 bullet.Transform.Position = Owner.Transform.Position;
 
-                float angleRadians = angleDegrees * MathF.PI / 180;
+                float angleRadians = targetAngleDegrees * MathF.PI / 180;
                 Vector2f normalizedDirection = new Vector2f(
                         MathF.Cos(angleRadians),
                         MathF.Sin(angleRadians));
-                bullet.GetComponent<VelocityMovementComponent>().Velocity = normalizedDirection * bulletSpeed;
+                bullet.GetComponent<VelocityMovementComponent>().Velocity = normalizedDirection * linearBulletSpeed * i;
                 bullet.Transform.Position += normalizedDirection * GameSettings.EnemyBulletStartRadialOffset;
 
                 // Ensure the bullets always overlap in the expected order
                 bullet.GetComponent<SpriteComponent>().SortingOrder = i;
 
-                // Add to the queue to be enabled next frame
-                bullets.Enqueue(bullet);
-
-                angleDegrees += angleStep;
+                // Add to the list to be enabled next frame
+                bullets.Add(bullet);
             }
 
             yield return new WaitForFrame();
 
             // Ensure all bullets start on the same frame
             // Some may be delayed due to difference between reusing pooled objects and creating new objects
-            while (bullets.Any())
+            foreach (GameObject bullet in bullets)
             {
-                GameObject bullet = bullets.Dequeue();
                 bullet.IsEnabled = true;
+            }
+
+            const int bulletSize = 50;
+            yield return new WaitForTime(TimeSpan.FromSeconds(bulletSize / linearBulletSpeed));
+
+            foreach (GameObject bullet in bullets)
+            {
+                bullet.GetComponent<VelocityMovementComponent>().Reset();
+            }
+
+            yield return new WaitForTime(TimeSpan.FromSeconds(0.2));
+
+            foreach (GameObject bullet in bullets)
+            {
+                TimedDestroyComponent timedDestroyComponent = bullet.GetComponent<TimedDestroyComponent>();
+                timedDestroyComponent.Reset();
+                timedDestroyComponent.TimeToLive = 1f;
+
+                AngularVelocityMovementComponent angularMovementComponent = bullet.GetComponent<AngularVelocityMovementComponent>();
+                angularMovementComponent.AngularVelocity = angularBulletSpeed;
+                angularMovementComponent.OrbitalCenter = Owner;
+                angularMovementComponent.Radius = (Owner.Transform.Position - bullet.Transform.Position).Magnitude();
             }
         }
 
@@ -132,12 +150,8 @@ namespace Bullets
             colliderComponent.SetColliderRectOffset(GameSettings.EnemyBulletColliderRectOffset);
             colliderComponent.LayerId = GameSettings.EnemyBulletCollisionLayer;
 
-            RangedDestroyComponent rangedDestroyComponent = bullet.GetComponent<RangedDestroyComponent>();
-            rangedDestroyComponent.Target = Owner;
-            rangedDestroyComponent.MaxDistance = GameSettings.EnemyBulletMaxDistance;
-
             TimedDestroyComponent timedDestroyComponent = bullet.GetComponent<TimedDestroyComponent>();
-            timedDestroyComponent.TimeToLive = 3;
+            timedDestroyComponent.TimeToLive = 2f;
 
             DamageComponent damageComponent = bullet.GetComponent<DamageComponent>();
             damageComponent.Damage = 2;

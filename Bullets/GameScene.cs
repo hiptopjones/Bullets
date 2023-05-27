@@ -41,7 +41,8 @@ namespace Bullets
 
             // Add standard (empty) components
             SpriteComponent spriteComponent = bullet.AddComponent<SpriteComponent>();
-            VelocityMovementComponent movementComponent = bullet.AddComponent<VelocityMovementComponent>();
+            VelocityMovementComponent linearMovementComponent = bullet.AddComponent<VelocityMovementComponent>();
+            AngularVelocityMovementComponent angularMovementComponent = bullet.AddComponent<AngularVelocityMovementComponent>();
             BoxColliderComponent colliderComponent = bullet.AddComponent<BoxColliderComponent>();
             //DebugCollisionHandlerComponent collisionHandlerComponent = bullet.AddComponent<DebugCollisionHandlerComponent>();
             BulletCollisionHandlerComponent collisionHandlerComponent = bullet.AddComponent<BulletCollisionHandlerComponent>();
@@ -117,9 +118,10 @@ namespace Bullets
             colliderComponent.SetColliderRectOffset(GameSettings.EnemyTurretColliderRectOffset);
             colliderComponent.LayerId = (int)GameSettings.EnemyTurretCollisionLayer;
 
-            ArcPatternBulletEmitterComponent bulletEmitterComponent = enemy.AddComponent<ArcPatternBulletEmitterComponent>();
+            SweepRayBulletEmitterComponent bulletEmitterComponent = enemy.AddComponent<SweepRayBulletEmitterComponent>();
+            //ArcPatternBulletEmitterComponent bulletEmitterComponent = enemy.AddComponent<ArcPatternBulletEmitterComponent>();
             bulletEmitterComponent.Target = player;
-            bulletEmitterComponent.PatternInterval = 3;
+            bulletEmitterComponent.PatternInterval = 5;
 
             //DebugCollisionHandlerComponent collisionHandlerComponent = enemy.AddComponent<DebugCollisionHandlerComponent>();
             DamageCollisionHandlerComponent collisionHandlerComponent = enemy.AddComponent<DamageCollisionHandlerComponent>();

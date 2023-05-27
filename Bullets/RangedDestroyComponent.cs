@@ -15,6 +15,11 @@ namespace Bullets
 
         public override void Update(float deltaTime)
         {
+            if (Target == null)
+            {
+                return;
+            }
+
             float distance = Owner.Transform.Position.DistanceTo(Target.Transform.Position);
             if (distance > MaxDistance)
             {

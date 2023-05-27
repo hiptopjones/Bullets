@@ -16,5 +16,10 @@ namespace Bullets
         {
             Owner.Transform.Position += Velocity * deltaTime;
         }
+
+        public override void Reset()
+        {
+            Velocity = new Vector2f();
+        }
     }
 }
