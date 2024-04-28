@@ -118,8 +118,8 @@ namespace Bullets
             colliderComponent.SetColliderRectOffset(GameSettings.EnemyTurretColliderRectOffset);
             colliderComponent.LayerId = (int)GameSettings.EnemyTurretCollisionLayer;
 
-            SweepRayBulletEmitterComponent bulletEmitterComponent = enemy.AddComponent<SweepRayBulletEmitterComponent>();
-            //ArcPatternBulletEmitterComponent bulletEmitterComponent = enemy.AddComponent<ArcPatternBulletEmitterComponent>();
+            //SweepRayBulletEmitterComponent bulletEmitterComponent = enemy.AddComponent<SweepRayBulletEmitterComponent>();
+            ArcPatternBulletEmitterComponent bulletEmitterComponent = enemy.AddComponent<ArcPatternBulletEmitterComponent>();
             bulletEmitterComponent.Target = player;
             bulletEmitterComponent.PatternInterval = 5;
 
